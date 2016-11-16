@@ -7,12 +7,12 @@ V = x^2;
 dV = 2*(x^3-x^2);
 
 
-rho_u = 0.55; rho_uINF = rho_u; rho_l = 0; i=0;
+rho_u = 1; rho_uINF = rho_u; rho_l = 0; i=0;
 
 while (rho_u-rho_l >= 0.01)
         
-    rho_u %just use to display the current upper bound rho value
-    rho_l %just use to display the current lower bound rho value
+    rho_u %just used to display the current upper bound rho value
+    rho_l %just used to display the current lower bound rho value
     
     % DSOS program
     % Initialize program
@@ -32,32 +32,12 @@ while (rho_u-rho_l >= 0.01)
     % Solve program
     %sol = prog.minimize(trace(blkdiag(Q0,Q1,Q2)), @spot_sedumi, options);
     sol = prog.minimize(trace(eye(3*(deg+1))-(blkdiag(Q0,Q1,Q2))), @spot_sedumi, options);
-    %sol =
-    %prog.minimize(trace(eye(3*(deg+1))-(blkdiag(Q0,Q1,Q2)))+offDiag(blkdiag(Q0,Q1,Q2)),@spot_sedumi, options); % this does not work as good as without offdiag terms
     %sol = prog.minimize((0), @spot_sedumi, options);    
     
     % Optimal value
     opt_dsos0 = double(sol.eval(Q0));
     opt_dsos1 = double(sol.eval(Q1));
     opt_dsos2 = double(sol.eval(Q2));
-    
-    % from here some post processing, i.e. checking PSDness of the DD
-    % matrices
-%     infeasible = 0;
-%     if (~all(eig(opt_dsos0)>=0) == 1)
-%         infeasible = 1;
-%         disp('infeasible solution')
-%     end
-%     opt_dsos1 = double(sol.eval(Q1));
-%     if (~all(eig(opt_dsos1)>=0) == 1)
-%         infeasible = 1;
-%         disp('infeasible solution')
-%     end
-%     opt_dsos2 = double(sol.eval(Q2));
-%     if (~all(eig(opt_dsos2)>=0) == 1)
-%         infeasible = 1;
-%         disp('infeasible solution')
-%     end
     
     [feasibility,violation] = isDSOS(blkdiag(opt_dsos0,opt_dsos1,opt_dsos2))
     infeasible = ~feasibility;
@@ -85,7 +65,6 @@ while (rho_u-rho_l >= 0.01)
 %     plottingdV(rho_l);
 %     framesdV(i) = getframe(gcf)
 %     close all;
-    
     
 end
 
