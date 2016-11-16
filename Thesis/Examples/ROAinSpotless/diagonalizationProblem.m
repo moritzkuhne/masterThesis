@@ -22,7 +22,7 @@ f = x^4 + x^2;
     options = spot_sdp_default_options();
     % Solve program
 %    sol = prog.minimize(trace(blkdiag(Q0)), @spot_sedumi, options);
-    sol = prog.minimizeDSOS((trace(eye(deg+1)-Q0)), @spot_sedumi, options);
+    sol = prog.minimizeDSOS((trace(eye(deg+1)-Q0)), @spot_sedumi, options);     %this method needs some scaling for I
 %    sol = prog.minimize((trace(eye(deg+1)-Q0)+offDiag(Q0)), @spot_sedumi, options);
     % Optimal value
     opt_dsos0 = double(sol.eval(Q0));
