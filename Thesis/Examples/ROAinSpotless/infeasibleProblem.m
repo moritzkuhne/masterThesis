@@ -6,6 +6,7 @@
 %  the solution is expected to look like: diagonal elements are inf
 %  but the solution are finite and scale reciprocal with dim(Q0)
 %  same happens when obj = tr(-Q0), it should be unbounded/dual infeasible
+%  gurobi tells me this correctly!
 %
 
 clear all; clc;
@@ -26,6 +27,7 @@ x = msspoly('x',1);     %creates msspoly object
     options = spot_sdp_default_options();
     % Solve program
     %sol = prog.minimizeDSOS(trace(eye(deg+1)-Q0), @spot_sedumi, options);
+    sol = prog.minimizeDSOS(trace(eye(deg+1)-Q0), @spot_gurobi, options);
     % Optimal value
     opt_dsos0 = double(sol.eval(Q0))
     trace(eye(deg+1)-opt_dsos0)
@@ -67,7 +69,8 @@ V = x^2;
     % sedumi options
     options = spot_sdp_default_options();
     % Solve program
-    sol = prog.minimize(trace(-Q0), @spot_sedumi, options);  
+    sol = prog.minimize(trace(-Q0), @spot_gurobi, options); 
+    %sol = prog.minimize(trace(-Q0), @spot_sedumi, options);  
   
     % Optimal value
     opt_dsos0 = double(sol.eval(Q0))
