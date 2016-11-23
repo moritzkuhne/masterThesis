@@ -1,14 +1,12 @@
 function [combinatorials] = multiplicativeMonoid(polynomials,deg)
 %MULTIPLICATIVEMONOID creates multiplicative monoid of mss polynomials
 %   combines input arguments up to degree(of combination) deg
-%   e.g. f1 = x^2, deg=2 returns f1^2 
+%   e.g. f1 = x^2. deg=2 returns f1^2 
 %   consider degree of the polynomials
 %
-
-%these linies are needed for testing withing the function, remove asap.
-% x = msspoly('x',3);        
-% polynomials = [x(1);x(2);x(3)];
-% deg = 1;
+x = msspoly('x',3);        
+polynomials = [x(1);x(2);x(3)];
+deg = 1;
 
 % preloop assignments 
 pos = []; %1 accords to first elem of polynomials 
@@ -38,7 +36,8 @@ for i=1:length(comb)    %for each row in comb, one combinatoriual of fi
     end
 end
 
-combinatorials = [monomials(t,0); combinatorials]; %adds fi^0 = 1 to the combinatorials
+
+
 
 end
 
