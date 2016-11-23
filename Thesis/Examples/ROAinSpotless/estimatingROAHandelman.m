@@ -1,11 +1,10 @@
-%% solving S-Procedure for V = x^2 =< rho and dynamics dx = x^2 - x
+%% solving Handelman Rep. for V = x^2 =< rho and dynamics dx = x^2 - x
 clear all; clc;
 
 % initiate polynomials
 x = msspoly('x',1);     %creates msspoly object   
 V = x^2;
 dV = 2*(x^3-x^2);
-
 
 rho_u = 1; rho_uINF = rho_u; rho_l = 0; i=0;
 
@@ -14,27 +13,29 @@ while (rho_u-rho_l >= 0.01)
     rho_u %just used to display the current upper bound rho value
     rho_l %just used to display the current lower bound rho value
     
-    % DSOS program
+    polynomials = [rho_u-V;rho_u-x;x+rho_u];
+    deg = 2;
+    mMonoid = multiplicativeMonoid(polynomials, deg);
+    
+    % spotprog program
     % Initialize program
     prog = spotsosprog;
     prog = prog.withIndeterminate(x);
-    deg = 2;
-    z = monomials(x,0:deg);
     
-    [prog,Q0] = prog.newDD(deg+1); s0 = z.'*Q0*z;   %constraining the DSOS multiplier
-    % DSOS constraint
-    prog = prog.withDSOS((-dV-s0*(rho_u-V)));
+    % add nonlinear multipliers
+    [prog,lambda] = prog.newPos(length(mMonoid));
+    prog = prog.withEqs(-dV-lambda.'*mMonoid);
     
-    % sedumi options
+    % options
     options = spot_sdp_default_options();
     % Solve program
-    sol = prog.minimize(trace((blkdiag(Q0)-eye(deg+1))), @spot_gurobi, options);
+    sol = prog.minimize(sum(lambda), @spot_gurobi, options);
     %sol = prog.minimize((0), @spot_sedumi, options);    
     
     % Optimal value
-    opt_dsos0 = double(sol.eval(Q0));
+    opt_lambda = double(sol.eval(lambda));
     
-    [feasibility,violation] = isDSOS(blkdiag(opt_dsos0))
+    [feasibility,violation] = isDSOS(diag(opt_lambda))
     infeasible = ~feasibility;
     
     % initiate new problem
@@ -62,9 +63,6 @@ while (rho_u-rho_l >= 0.01)
 %     close all;
     
 end
-
-opt_dsos0
--dV-(z.'*opt_dsos0*z)*(rho_u-V)
 
 disp(['the estrimated ROA corresponds to rho = ', num2str(rho_u)])
 plottingV(rho_l);
