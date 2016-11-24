@@ -5,10 +5,6 @@ function [combinatorials] = multiplicativeMonoid(polynomials,deg)
 %   consider degree of the polynomials
 %
 
-%these linies are needed for testing withing the function, remove asap.
-% x = msspoly('x',3);        
-% polynomials = [x(1);x(2);x(3)];
-% deg = 1;
 
 % preloop assignments 
 pos = []; %1 accords to first elem of polynomials 
@@ -30,7 +26,7 @@ end
 t = msspoly('t',1); %creates temp. mss poly to set type for array
 combinatorials = ones(length(comb),1)*monomials(t,0); 
 
-for i=1:length(comb)    %for each row in comb, one combinatoriual of fi
+for i=1:length(comb)    %for each row in comb, one combinatorial of fi
     for j=1:size(comb,2)%multiplies elements along a row of comb
         if ~comb(i,j)==0 %zeros are skipped as they do not accord to fi
             combinatorials(i) = combinatorials(i)*polynomials(comb(i,j));
