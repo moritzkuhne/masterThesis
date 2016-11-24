@@ -5,6 +5,7 @@ clear all; clc;
 x = msspoly('x',1);     %creates msspoly object   
 V = x^2;
 dV = 2*(x^3-x^2);
+deg = 5;
 
 rho_u = 1; rho_uINF = rho_u; rho_l = 0; i=0;
 
@@ -14,28 +15,22 @@ while (rho_u-rho_l >= 0.01)
     rho_l %just used to display the current lower bound rho value
     
     polynomials = [rho_u-V;rho_u-x;x+rho_u];
-    deg = 2;
     mMonoid = multiplicativeMonoid(polynomials, deg);
-    
-    % spotprog program
-    % Initialize program
+        
+    % Initialize spotsosprog program
     prog = spotsosprog;
     prog = prog.withIndeterminate(x);
-    
+        
     % add nonlinear multipliers
     [prog,lambda] = prog.newPos(length(mMonoid));
-    prog = prog.withEqs(-dV-lambda.'*mMonoid);
+    prog = prog.withPolyEqs(-dV-lambda.'*mMonoid);
     
     % options
     options = spot_sdp_default_options();
     % Solve program
-    sol = prog.minimize(sum(lambda), @spot_gurobi, options);
-    %sol = prog.minimize((0), @spot_sedumi, options);    
+    sol = prog.minimize(sum(lambda), @spot_gurobi, options);    
     
-    % Optimal value
-    opt_lambda = double(sol.eval(lambda));
-    
-    [feasibility,violation] = isDSOS(diag(opt_lambda))
+    feasibility = sol.isPrimalFeasible();
     infeasible = ~feasibility;
     
     % initiate new problem
@@ -63,6 +58,10 @@ while (rho_u-rho_l >= 0.01)
 %     close all;
     
 end
+
+% Optimal value
+opt_lambda = double(sol.eval(lambda));
+[feasibility,~] = isDSOS(diag(opt_lambda));
 
 disp(['the estrimated ROA corresponds to rho = ', num2str(rho_u)])
 plottingV(rho_l);
