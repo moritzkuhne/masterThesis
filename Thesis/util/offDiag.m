@@ -1,3 +1,5 @@
+% to do: fix this whole file
+
 function [offDiagSum] = offDiag(Q)
 %OFFDIAG sums the off diagonal terms
 %   Detailed explanation goes here
