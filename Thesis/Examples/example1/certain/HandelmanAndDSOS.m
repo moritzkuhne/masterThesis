@@ -18,15 +18,15 @@ rho_failed = rho_extr;  %lowest rho value for which prog. failed
 solution = solROAprog(-dV,rho_extr,'symm');
 
 %set the degree of the multiplicative monoid
-deg = 1;
+deg = 7;
 
 while ~(rho_try-solution.rho <= 0.01 && rho_try ~= 0) && ...
         ~(solution.rho_extr-solution.rho <= 0.01) && ... 
         ~(rho_failed-solution.rho <= 0.01)
     
-    inequalities = rho_try-V;
+    inequalities = [rho_try-V;rho_try-x;x+rho_try];
 
-    [sol,DD] = HandelmanAndDSOSProg(-dV,inequalities,deg);
+    [sol,lambda] = HandelmanAndDSOSProg(-dV,inequalities,deg);
     feasibility = sol.isPrimalFeasible();
     
     if feasibility
@@ -42,8 +42,8 @@ end
 % Optimal value
 if ~isempty(solution.sol)
     if solution.sol.isPrimalFeasible()
-        opt_DD = double(solution.sol.eval(DD));
-        [DSOSfeasibility,~] = isDSOS(opt_DD);
+        opt_lambda = double(solution.sol.eval(lambda));
+        [DSOSfeasibility,~] = isDSOS(diag(opt_lambda));
     end
 else
     warning(['Increase degree or relaxation until origin is certified'...
