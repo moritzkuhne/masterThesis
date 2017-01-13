@@ -43,9 +43,7 @@ end
 if ~isempty(solution.sol)
     if solution.sol.isPrimalFeasible()
         
-        opt_Q0 = double(solution.sol.eval(...
-            trace(blkdiag(decisionVar{:})...
-            -eye(length(decisionVar)*(deg+1)))));
+        opt_Q0 = double(solution.sol.eval(blkdiag(decisionDD{:})));
                 
         [DSOSfeasibility,~] = isDSOS(opt_Q0);
     end
