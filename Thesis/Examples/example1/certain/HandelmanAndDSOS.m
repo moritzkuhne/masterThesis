@@ -18,13 +18,14 @@ rho_failed = rho_extr;  %lowest rho value for which prog. failed
 solution = solROAprog(-dV,rho_extr,'symm');
 
 %set the degree of the multiplicative monoid
-deg = 7;
+deg = 5;
 
 while ~(rho_try-solution.rho <= 0.01 && rho_try ~= 0) && ...
         ~(solution.rho_extr-solution.rho <= 0.01) && ... 
         ~(rho_failed-solution.rho <= 0.01)
     
-    inequalities = [rho_try-V;rho_try-x;x+rho_try];
+    inequalities = [rho_try-V];
+    %inequalities = [rho_try-V;rho_try-x;x+rho_try];
 
     [sol,lambda] = HandelmanAndDSOSProg(-dV,inequalities,deg);
     feasibility = sol.isPrimalFeasible();

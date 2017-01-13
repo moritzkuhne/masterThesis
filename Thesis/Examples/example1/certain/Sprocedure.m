@@ -22,7 +22,7 @@ while ~(rho_try-solution.rho <= 0.01 && rho_try ~= 0) && ...
         ~(rho_failed-solution.rho <= 0.01)
     
     inequalities = [rho_try-V];
-    deg = 3;
+    deg = 1;
     
     [sol,decisionDD] = SprocedureProg(-dV,inequalities,deg);
     feasibility = sol.isPrimalFeasible();
@@ -56,4 +56,4 @@ end
 disp(['the estrimated ROA corresponds to rho = ',...
                             num2str(solution.rho),'.'])
 %plottingV(solution.rho);
-plottingdV(solution.rho);
+%plottingdV(solution.rho);

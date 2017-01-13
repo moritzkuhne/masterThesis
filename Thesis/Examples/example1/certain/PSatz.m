@@ -57,4 +57,4 @@ end
 disp(['The estrimated ROA corresponds to rho = ',...
                                         num2str(solution.rho),'.'])
 %plottingV(solution.rho);
-plottingdV(solution.rho);
+%plottingdV(solution.rho);

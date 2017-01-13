@@ -24,9 +24,9 @@ while ~(rho_try-solution.rho <= 0.01 && rho_try ~= 0) && ...
         ~(rho_failed-solution.rho <= 0.01)
 
     inequalities = [rho_try-V; a-a_l; a_u-a];
-    deg = 3;
+    deg = 2;
     
-    [sol,decisionVar] = PsatzProg(-dV,inequalities,deg);    
+    [sol,decisionDD] = PsatzProg(-dV,inequalities,deg);    
     feasibility = sol.isPrimalFeasible()
     
     if feasibility
@@ -43,9 +43,7 @@ end
 if ~isempty(solution.sol)
     if solution.sol.isPrimalFeasible()
         
-        opt_Q0 = double(solution.sol.eval(...
-            trace(blkdiag(decisionVar{:})...
-            -eye(length(decisionVar)*(deg+1)))));
+        opt_Q0 = double(solution.sol.eval(blkdiag(decisionDD{:})));
                 
         [DSOSfeasibility,~] = isDSOS(opt_Q0);
     end

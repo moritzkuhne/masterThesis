@@ -20,7 +20,7 @@ rho_failed = rho_extr;  %lowest rho value for which prog. failed
 solution = solROAprog(-dV,rho_extr,'symm');
 
 %set the degree of the multiplicative monoid
-deg = 1;
+deg = 50;
 
 while ~(rho_try-solution.rho <= 0.01 && rho_try ~= 0) && ...
         ~(solution.rho_extr-solution.rho <= 0.01) && ... 
