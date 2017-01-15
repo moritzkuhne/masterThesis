@@ -13,6 +13,14 @@ if nargin < 2
     deg = length(inequalities);
 end
 
+if deg > length(inequalities)
+   warning(['Degree of coupling in cone with SOS multipliers can''','t'...
+            'be higher than number of inequalities. ', 'Degree is set to'...
+            ' number of inequalities.'])
+        
+   deg = length(inequalities);
+end
+
 % preloop assignments 
 pos = [1:length(inequalities)]; %1 accords to first elem of polynomials 
 comb = []; % creating all combinatorials, encoded in position
