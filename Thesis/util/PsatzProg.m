@@ -6,7 +6,8 @@
 
 
 
-function [solution,decisionVar] = PsatzProg(poly,inequalities,deg)
+function [solution,Qset] = PsatzProg(poly,inequalities,...
+    deg,options)
 %PsatzProg Sets up Positivstllensatz programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -43,17 +44,11 @@ function [solution,decisionVar] = PsatzProg(poly,inequalities,deg)
     prog = prog.withDSOS((-S-poly^2));
     
     % options
-    options = spot_sdp_default_options();
+    spotOptions = spot_sdp_default_options();
     % Solve program
     solution = prog.minimize(...
         trace(blkdiag(Qset{:})-eye(length(Qset)*length(z))),...
-        @spot_gurobi, options); 
+        @spot_gurobi, spotOptions); 
     
-%     decisionVar = cell(2,1);
-%     decisionVar{1} = Qset;
-%     decisionVar{2} = lambda;
-
-      decisionVar = Qset;  
-
 end
 

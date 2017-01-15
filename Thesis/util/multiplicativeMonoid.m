@@ -37,7 +37,7 @@ for i=1:length(comb)    %for each row in comb, one combinatorial of fi
     end
 end
 
-combinatorials = [monomials(t,0); combinatorials]; %adds fi^0 = 1 to the combinatorials
+% combinatorials = [monomials(t,0); combinatorials]; %adds fi^0 = 1 to the combinatorials
 
 end
 

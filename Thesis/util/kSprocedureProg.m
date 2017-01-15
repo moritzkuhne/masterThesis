@@ -3,15 +3,17 @@
 %           add possibility to pass solver options
 %           test what happens if indet are called z (like monomials)
 
-function [solution,Qset] = SprocedureProg(poly,inequalities,deg,options)
+function [solution,Qset] = kSprocedureProg(poly,inequalities,...
+    deg,options)
 %SPROCEDUREPROG Sets up S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
 %
 %   returns solution and returns a cell with entries the DD matrixes
 %   Detailed explanation goes here
-
+    
     [indet,~,~] = decomp(poly);
+    coneOfPolynomials = coneWithSOS(inequalities,options.k);
     z = monomials(indet,0:deg);
     
     %initiate program
@@ -19,14 +21,14 @@ function [solution,Qset] = SprocedureProg(poly,inequalities,deg,options)
     prog = prog.withIndeterminate(indet);
     
     % setting up DSOS polynomial multipliers
-    [prog,Qset] = prog.newDDSet(length(z),length(inequalities));
+    [prog,Qset] = prog.newDDSet(length(z),length(coneOfPolynomials));
     
-    for i=1:length(inequalities)
+    for i=1:length(coneOfPolynomials)
         
         if ~exist('S', 'var')
-            S = (z.'*Qset{i}*z)*inequalities(i);
+            S = (z.'*Qset{i}*z)*coneOfPolynomials(i);
         else
-            S = S + (z.'*Qset{i}*z)*inequalities(i);
+            S = S + (z.'*Qset{i}*z)*coneOfPolynomials(i);
         end
         
     end
