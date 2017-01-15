@@ -5,7 +5,8 @@
 %           test what happens if indet are called z (like monomials)
 %           test weather inequalities indet. match poly indet. 
 
-function [solution,lambda] = HandelmanProg(poly,inequalities,deg)
+function [solution,lambda] = HandelmanProg(poly,inequalities,...
+    deg,options)
 %SPROCEDUREPROG Sets up S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -25,9 +26,9 @@ function [solution,lambda] = HandelmanProg(poly,inequalities,deg)
     prog = prog.withPolyEqs(poly-lambda.'*mMonoid);
     
     % options
-    options = spot_sdp_default_options();
+    spotOptions = spot_sdp_default_options();
     % Solve program
-    solution = prog.minimize(sum(lambda),@spot_gurobi, options); 
+    solution = prog.minimize(sum(lambda),@spot_gurobi, spotOptions); 
     
 end
 

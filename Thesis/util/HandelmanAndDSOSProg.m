@@ -5,7 +5,8 @@
 %           test what happens if indet are called z (like monomials)
 %           test weather inequalities indet. match poly indet. 
 
-function [solution,lambda] = HandelmanAndDSOSProg(poly,inequalities,deg)
+function [solution,lambda] = HandelmanAndDSOSProg(poly,inequalities,...
+    deg,options)
 %HandelmanAndDSOS Sets up Handelman programm constrained to DSOS 
 % in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
@@ -26,9 +27,9 @@ function [solution,lambda] = HandelmanAndDSOSProg(poly,inequalities,deg)
     prog = prog.withDSOS(poly-lambda.'*mMonoid);
     
     % options
-    options = spot_sdp_default_options();
+    spotOptions = spot_sdp_default_options();
     % Solve program
-    solution = prog.minimize(sum(lambda),@spot_gurobi, options); 
+    solution = prog.minimize(sum(lambda),@spot_gurobi, spotOptions); 
     
 end
 
