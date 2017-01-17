@@ -16,7 +16,7 @@ function [solution,Qset] = PsatzProg(poly,inequalities,...
 %   Detailed explanation goes here
 
     [indet,~,~] = decomp(poly);
-    coneOfPolynomials = coneWithSOS([-poly;inequalities]);
+    coneOfPolynomials = coneWithSOS([-poly,inequalities]);
     z = monomials(indet,0:deg);
     
     %initiate program
