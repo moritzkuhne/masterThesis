@@ -1,3 +1,4 @@
+
 % TO DO:    add possibility to switch between multipliers
 %           add possibility to chose obj. function
 %           add possibility to pass solver options
@@ -11,6 +12,10 @@ function [solution,Qset] = kSprocedureProg(poly,inequalities,...
 %
 %   returns solution and returns a cell with entries the DD matrixes
 %   Detailed explanation goes here
+
+    if nargin < 4
+        options = [];
+    end
     
     [indet,~,~] = decomp(poly);
     coneOfPolynomials = coneWithSOS(inequalities,options.k);
@@ -36,12 +41,23 @@ function [solution,Qset] = kSprocedureProg(poly,inequalities,...
     % DSOS constraint
     prog = prog.withDSOS((poly-S));
     
-    % options
+    %set solver options
     spotOptions = spot_sdp_default_options();
+    if isfield(options,'solverOptions')
+        spotOptions.solver_options = options.solverOptions;
+    else
+        spotOptions.solver_options = struct();
+    end
+
+    %define objective function
+    if isfield(options,'objective')
+        objective = objectiveROAProgDSOS(options.objective,Qset);
+    else
+        objective = 0;
+    end
+    
     % Solve program
-    solution = prog.minimize(...
-        trace(blkdiag(Qset{:})-eye(length(Qset)*length(z))),...
-        @spot_gurobi, spotOptions); 
+    solution = prog.minimize(objective, @spot_gurobi, spotOptions);
     
 end
 

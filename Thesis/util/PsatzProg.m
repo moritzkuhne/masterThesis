@@ -14,7 +14,11 @@ function [solution,Qset] = PsatzProg(poly,inequalities,...
 %
 %   returns solution and returns a cell with entries the DD matrixes
 %   Detailed explanation goes here
-
+    
+    if nargin < 4
+        options = [];
+    end
+    
     [indet,~,~] = decomp(poly);
     coneOfPolynomials = coneWithSOS([-poly,inequalities]);
     z = monomials(indet,0:deg);
@@ -43,12 +47,23 @@ function [solution,Qset] = PsatzProg(poly,inequalities,...
     %prog = prog.withDSOS((-S-lambda*poly^2));
     prog = prog.withDSOS((-S-poly^2));
     
-    % options
+    %set solver options
     spotOptions = spot_sdp_default_options();
+    if isfield(options,'solverOptions')
+        spotOptions.solver_options = options.solverOptions;
+    else
+        spotOptions.solver_options = struct();
+    end
+    
+    %define objective function
+    if isfield(options,'objective')
+        objective = objectiveROAProgDSOS(options.objective,Qset);
+    else
+        objective = 0;
+    end
+    
     % Solve program
-    solution = prog.minimize(...
-        trace(blkdiag(Qset{:})-eye(length(Qset)*length(z))),...
-        @spot_gurobi, spotOptions); 
+    solution = prog.minimize(objective, @spot_gurobi, spotOptions);
     
 end
 

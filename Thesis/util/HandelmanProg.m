@@ -14,6 +14,10 @@ function [solution,lambda] = HandelmanProg(poly,inequalities,...
 %   returns solution and returns a cell with entries the DD matrixes
 %   Detailed explanation goes here
 
+    if nargin < 4
+        options = [];
+    end
+
     [indet,~,~] = decomp(poly);
     mMonoid = multiplicativeMonoid(inequalities, deg);
     
@@ -25,10 +29,23 @@ function [solution,lambda] = HandelmanProg(poly,inequalities,...
     [prog,lambda] = prog.newPos(length(mMonoid));
     prog = prog.withPolyEqs(poly-lambda.'*mMonoid);
     
-    % options
+    %set solver options
     spotOptions = spot_sdp_default_options();
+    if isfield(options,'solverOptions')
+        spotOptions.solver_options = options.solverOptions;
+    else
+        spotOptions.solver_options = struct();
+    end
+    
+    %define objective function
+    if isfield(options,'objective')
+        objective = objectiveROAProgScalar(options.objective,lambda);
+    else
+        objective = 0;
+    end
+    
     % Solve program
-    solution = prog.minimize(sum(lambda),@spot_gurobi, spotOptions); 
+    solution = prog.minimize(objective, @spot_gurobi, spotOptions);  
     
 end
 
