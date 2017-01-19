@@ -1,7 +1,7 @@
 function [x,y,z,info] = spot_gurobi(A,b,c,K,options)
 
-if  isfield(options,'solveroptions')
-    options = options.solveroptions;
+if  isfield(options,'solver_options') %this variable was falsely written
+    options = options.solver_options;
 else
     options = struct();
 end
@@ -49,6 +49,8 @@ tic
 output = gurobi(model,options);
 info.runtime = toc;
 
+info.output = output; %I want the complete output, get info on used method. 
+
 switch output.status
   case {'LOADED', 'INTERRUPTED', 'IN_PROGRESS'}
     status = spotsolstatus.STATUS_UNSOLVED;
@@ -69,9 +71,9 @@ info.status = status;
 
 if isfield(output,'runtime')
   info.runtime = output.runtime;
-else
+% else
   %sometimes Gurobi doesn't output a runtime
-  info.runtime = NaN;
+  % info.runtime = NaN; HEY! WE DID A TIC TOC EARLER, WHY WASTING THE INFO?
 end
 
 if isfield(output,'x')
