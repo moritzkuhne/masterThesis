@@ -1,4 +1,4 @@
-function [rho] = evalROAProgScalar(solution,lambda)
+function [rho,opt_lambda] = evalROAProgScalar(solution,lambda)
 %EVALROAPROG This function evaluates solutions from ROAProg
 %   Detailed explanation goes here
 
