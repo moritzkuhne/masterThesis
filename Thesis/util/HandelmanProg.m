@@ -18,7 +18,7 @@ function [solution,lambda] = HandelmanProg(poly,inequalities,...
         options = [];
     end
 
-    [indet,~,~] = decomp(poly);
+    [indet,~,~] = decomp([poly; inequalities.']);
     mMonoid = multiplicativeMonoid(inequalities, deg);
     
     %initiate program

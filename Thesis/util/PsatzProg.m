@@ -19,7 +19,7 @@ function [solution,Qset] = PsatzProg(poly,inequalities,...
         options = [];
     end
     
-    [indet,~,~] = decomp(poly);
+    [indet,~,~] = decomp([poly; inequalities.']);
     coneOfPolynomials = coneWithSOS([-poly,inequalities]);
     z = monomials(indet,0:deg);
     

@@ -17,7 +17,7 @@ function [solution,Qset] = kSprocedureProg(poly,inequalities,...
         options = [];
     end
     
-    [indet,~,~] = decomp(poly);
+    [indet,~,~] = decomp([poly; inequalities.']);
     coneOfPolynomials = coneWithSOS(inequalities,options.k);
     z = monomials(indet,0:deg);
     

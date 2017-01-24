@@ -14,8 +14,7 @@ function [solution,Qset] = SprocedureProg(poly,inequalities,deg,options)
     if nargin < 4
         options = [];
     end
-
-    [indet,~,~] = decomp(poly);
+    [indet,~,~] = decomp([poly; inequalities.']);
     z = monomials(indet,0:deg);
     
     %initiate program
