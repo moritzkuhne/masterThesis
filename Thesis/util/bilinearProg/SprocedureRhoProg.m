@@ -1,16 +1,15 @@
 % TO DO:    add wiggle at V
 
-function [solution,rho] = SprocedureRhoProg(dV_negated,V,inequalities,deg,opt_Qset,options)
+function [solution,rho,freeV] = SprocedureRhoProg(dx,x,inequalities,deg,opt_Qset,options)
 %SPROCEDURERHOPROG Sets up S-procedure programm in rho and maximize rho
 %
 %   returns solution is a single scalar rho
 
-    if nargin < 5
+    if nargin < 6
         options = [];
     end
 
-    [indet,~,~] = decomp(dV_negated);
-    z = monomials(indet,0:deg);
+    [indet,~,~] = decomp([x; inequalities.']);
     
     %initiate program
     prog = spotsosprog;
@@ -19,6 +18,10 @@ function [solution,rho] = SprocedureRhoProg(dV_negated,V,inequalities,deg,opt_Qs
     % setting decision variable rho
     [prog,rho] = prog.newPos(1);
     
+    %setting new V
+    [prog,V,dV,freeV] = bilinearV(prog,dx,x,inequalities);
+        
+    z = monomials(indet,0:deg);
     inequalities = [(rho-V), inequalities];
     % setting up DSOS polynomial multipliers  
     for i=1:length(inequalities)
@@ -32,7 +35,7 @@ function [solution,rho] = SprocedureRhoProg(dV_negated,V,inequalities,deg,opt_Qs
     end
     
     % DSOS constraint
-    prog = prog.withDSOS((dV_negated-S));
+    prog = prog.withDSOS((-dV-S));
     
     %set solver options
     spotOptions = spot_sdp_default_options();
@@ -47,6 +50,8 @@ function [solution,rho] = SprocedureRhoProg(dV_negated,V,inequalities,deg,opt_Qs
     
     % Solve program
     solution = prog.minimize(objective, @spot_gurobi, spotOptions); 
+    
+    
     
 end
 

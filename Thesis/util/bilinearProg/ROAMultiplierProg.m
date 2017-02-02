@@ -5,7 +5,8 @@ function [optimal_rho,optimal_multiplier,solution] = ROAMultiplierProg(dV,V,ineq
 %ROAPROG This function sets-up and solves estimatie ROA optimization prob. 
 %   Detailed explanation goes here
 
-[progMethod,evalMethod] = switchMethod(method,'multiplier');
+%[progMethod,evalMethod] = switchMethod(method,'multiplier');
+progMethod = @SprocedureProg; evalMethod = @evalROAProgDSOS;
 
 %setting up the initial and extreme rho values
 if ((length(rho_bounds) == 2) && (rho_bounds(1) < rho_bounds(2)))
