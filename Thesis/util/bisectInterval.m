@@ -25,7 +25,8 @@ switch solution.orthant
     case {'pos','symm'}
           if feasibility == 1
               solution.rho = rho_try;
-              rho_try = bisect(rho_try,rho_failed); 
+%               rho_try = bisect(rho_try,rho_failed);
+              rho_try = bisect(rho_try,rho_failed)+(0.5-rand)*(rho_try/10);
           else
               rho_failed = rho_try;
               rho_try = bisect(rho_try,solution.rho);
