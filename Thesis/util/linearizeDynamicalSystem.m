@@ -8,6 +8,8 @@ function [dynamicalSystem_lin,A] = linearizeDynamicalSystem(dynamicalSystem)
 %   for A matrix.
 %   More explenation here
 
+error('this function does not work for multidimensional systems')
+
 [indet,powers,M] = decomp(dynamicalSystem);
 
 for i=1:length(powers)
