@@ -45,7 +45,8 @@ function [solution,Qset] = PsatzProg(poly,inequalities,...
     
     % DSOS constraint
     %prog = prog.withDSOS((-S-lambda*poly^2));
-    prog = prog.withDSOS((-S-poly^2));
+    prog = prog.withDSOS((-S-poly^2))
+    %prog = prog.withDSOS((-S-1));
     
     %set solver options
     spotOptions = spot_sdp_default_options();
