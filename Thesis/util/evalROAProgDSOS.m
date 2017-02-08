@@ -11,20 +11,19 @@ if ~isempty(solution.sol)
              %length(decisionVar{1}) all elements in decisionVar are...
              %the same length, so length(decisionVar(1)) is constant
         end
-        
                 
         [DSOSfeasibility,violation] = isDSOS(blkdiag(opt_Qset{:}));
+        
+        if ~DSOSfeasibility
+            warning('The solution is not a DSOS, see violations: ')
+            violation
+        end
     end
 else
     warning(['Increase degree until origin is certified '...
                                                   'to be stable.'])
     disp(['Non-linear dynamics are not certified '...
                                     'to be stable at the origin!'])
-end
-
-if ~DSOSfeasibility
-    warning('The solution is not a DSOS, see violations: ')
-    violation
 end
 
 disp(['The estrimated ROA corresponds to rho = ',...
