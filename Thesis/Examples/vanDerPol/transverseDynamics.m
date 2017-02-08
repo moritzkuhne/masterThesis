@@ -7,6 +7,7 @@ function [dx_transverse] = transverseDynamics(system,x,tau,x_transverse)
 
 [z,PI] = transversalPlains2D(system,tau,x);
 
+x = x.'; %in the following functions x is a column vector
 % we fixed z=f(x), therefore PI is independet of tau. 
 dtau_nom = z.'*system(tau,(x+transp(PI)*x_transverse));
 dtau_den = z.'*system(tau,x);
