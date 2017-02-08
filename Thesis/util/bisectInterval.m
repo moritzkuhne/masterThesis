@@ -26,7 +26,7 @@ switch solution.orthant
           if feasibility == 1
               solution.rho = rho_try;
 %               rho_try = bisect(rho_try,rho_failed);
-              rho_try = bisect(rho_try,rho_failed)+(0.5-rand)*(rho_try/10);
+              rho_try = bisect(rho_try,rho_failed)+(0.5-rand)*(rho_try/100);
           else
               rho_failed = rho_try;
               rho_try = bisect(rho_try,solution.rho);
