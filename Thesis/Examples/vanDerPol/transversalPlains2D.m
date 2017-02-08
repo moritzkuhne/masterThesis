@@ -11,7 +11,8 @@ function [z,PI] = transversalPlains2D(system,tau,x)
 
 
 z_vectors = zeros(2); %warning('works only for planar dynamics')
-z = system(tau,x)/norm(system(tau,x)); %the surface is orthogonal to the trajectory
+%z = system(tau,x)/norm(system(tau,x)); %the surface is orthogonal to the trajectory
+z = (1/norm(x))*[-x(2);x(1)]; %the surface is radial to the center
 z_vectors(:,1) = [z(1); z(2)];  %transverse dynamics
 z_vectors(:,2) = [-z(2); z(1)]; 
 
