@@ -1,7 +1,8 @@
-% to do:    add k parameter for kSProcedure
-%           post processing: check if all multipliers are DSOS and ...
+% to do:    post processing: check if all multipliers are DSOS and ...
 %                            check solution/ accuracy of solver somehow
-
+%           this function works so far only for psatz and k-s-procedure!
+%           we need to handle vector of decsion variable instead of set for
+%           handelman representation!
 
 function [solution,decisionVar] = ROAProg(dV,V,inequalities,...
     method,deg,options)
@@ -10,21 +11,38 @@ function [solution,decisionVar] = ROAProg(dV,V,inequalities,...
 
 %setting up the initial and extreme rho values
 rho_try = 0;            %current rho value up for optimization 
-rho_extr = 1.1;         %maximum rho value of interesst  
+rho_extr = 5;         %maximum rho value of interesst  
 rho_failed = rho_extr;  %lowest rho value for which prog. failed
 
 %initiate the solution to the ROAprog
 solution = solROAprog(-dV,rho_extr,'pos');
 
-while ~(rho_try-solution.rho <= 0.01 && rho_try ~= 0) && ...
-        ~(solution.rho_extr-solution.rho <= 0.01) && ... 
-        ~(rho_failed-solution.rho <= 0.01)
+a = 0.001;
+while ~(rho_try-solution.rho <= a && rho_try ~= 0) && ...
+        ~(solution.rho_extr-solution.rho <= a) && ... 
+        ~(rho_failed-solution.rho <= a)
 
     [sol,decisionVar] = method(-dV,[(rho_try-V),inequalities],deg,options);
-    feasibility = sol.isPrimalFeasible()
     
-    if feasibility
-        solution.sol = sol;
+    if sol.isPrimalFeasible()
+        for i=1:length(decisionVar)
+            opt_Qset{i} = double(sol.eval(decisionVar{i}));
+             %length(decisionVar{1}) all elements in decisionVar are...
+             %the same length, so length(decisionVar(1)) is constant
+        end
+                
+        [DSOSfeasibility,violation] = isDSOS(blkdiag(opt_Qset{:}));
+
+        if DSOSfeasibility
+            feasibility = true;
+            solution.sol = sol;
+        else
+            feasibility = false; violation
+        end
+        
+    else
+        feasibility = false;
+        
     end
     
     % determine new rho_try (aka expand domain)
