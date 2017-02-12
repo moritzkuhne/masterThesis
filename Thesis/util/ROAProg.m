@@ -26,9 +26,9 @@ while ~terminate
     [sol,decisionVar] = method(-dV,[(rho_try-V),inequalities],deg,options);
     
     % step 3
-    [feasibility,violation] = isPSDprogFeasible(sol,decisionVar)
+    [feasibility,violation] = isPSDprogFeasible(sol,decisionVar);
     
-    [terminate,options] = isBreak(solution,rho_try,rho_failed,options);
+    [terminate,options] = isTerminate(solution,rho_try,rho_failed,options);
     
     if feasibility
         solution.rho = rho_try;
