@@ -8,7 +8,7 @@
 %                                                                        %       
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-close all; 
+%close all; 
 clear all; clc;
 disp('intialization');
 
@@ -68,9 +68,9 @@ params.FeasibilityTol = 1E-9; %default 1E-6
 %setting options
 options.solverOptions = params;
 
-method = @PsatzProg;evalMethod = @evalROAProgDSOS; deg = 4; options.objective = '0';
+%method = @PsatzProg;evalMethod = @evalROAProgDSOS; deg = 2; options.objective = '0';
 %method = @kSprocedureProg;evalMethod = @evalROAProgDSOS; deg = 2; options.k = 2; options.objective = '0';
-%method = @SprocedureProg;evalMethod = @evalROAProgDSOS; deg = 3; options.objective = '0';
+method = @SprocedureProg;evalMethod = @evalROAProgDSOS; deg = 3; options.objective = '0';
 %method = @HandelmanAndDSOSProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
 %method = @HandelmanProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
 
