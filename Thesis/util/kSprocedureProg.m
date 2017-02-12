@@ -41,14 +41,9 @@ function [solution,Qset] = kSprocedureProg(poly,inequalities,...
     % DSOS constraint
     prog = prog.withDSOS((poly-S));
     
-    %set solver options
-    spotOptions = spot_sdp_default_options();
-    if isfield(options,'solverOptions')
-        spotOptions.solver_options = options.solverOptions;
-    else
-        spotOptions.solver_options = struct();
-    end
-
+    %set solver and its options
+    [solver,spotOptions] = solverOptionsPSDProg(options);
+    
     %define objective function
     if isfield(options,'objective')
         objective = objectiveROAProgDSOS(options.objective,Qset);
@@ -57,7 +52,7 @@ function [solution,Qset] = kSprocedureProg(poly,inequalities,...
     end
     
     % Solve program
-    solution = prog.minimize(objective, @spot_gurobi, spotOptions);
+    solution = prog.minimize(objective, solver, spotOptions);
     
 end
 

@@ -29,13 +29,8 @@ function [solution,lambda] = HandelmanProg(poly,inequalities,...
     [prog,lambda] = prog.newPos(length(mMonoid));
     prog = prog.withPolyEqs(poly-lambda.'*mMonoid);
     
-    %set solver options
-    spotOptions = spot_sdp_default_options();
-    if isfield(options,'solverOptions')
-        spotOptions.solver_options = options.solverOptions;
-    else
-        spotOptions.solver_options = struct();
-    end
+    %set solver and its options
+    [solver,spotOptions] = solverOptionsPSDProg(options);
     
     %define objective function
     if isfield(options,'objective')
@@ -45,7 +40,7 @@ function [solution,lambda] = HandelmanProg(poly,inequalities,...
     end
     
     % Solve program
-    solution = prog.minimize(objective, @spot_gurobi, spotOptions);  
+    solution = prog.minimize(objective, solver, spotOptions); 
     
 end
 
