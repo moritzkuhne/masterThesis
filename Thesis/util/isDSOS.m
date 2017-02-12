@@ -20,6 +20,7 @@ function [feasibility,violation] = isDSOS(Q)
                 else
                     violation = strcat(violation,', eigenvalues');
                 end
+                break
             end
         end
     end    
