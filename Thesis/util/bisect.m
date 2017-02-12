@@ -1,20 +1,15 @@
-function [newFirstBound] = bisect(firstBound,secondBound)
-%BISECT bisects interval 
-%   only accepts non-negative values for bounds
-%   in case of negative bisection, transform coordinates i.e. xnew = -xold 
-%   gives middle between firstBound into direction of secondBound
+function rho_try = bisect(solution,rho_failed,~)
+%BISECT bisects interval with random point between interval
 
-if firstBound<0 || secondBound<0   
+rho = solution.rho;
+
+if rho<0 || rho_failed<0   
     error('Bounds need to be non-negative.');
 end
     
-if firstBound > secondBound
-    newFirstBound = 0.5*(firstBound-secondBound)+secondBound;
-elseif firstBound < secondBound
-    newFirstBound = 0.5*(secondBound-firstBound)+firstBound;
+if rho < rho_failed
+    rho_try = rho + rand*(rho_failed-rho);
 else
-    warning('Both bounds are equal, no bisection possible!')
-    newFirstBound = firstBound;
-
+    warning('Rho is larger than Rho_failed. This is not possible.')
 end
 
