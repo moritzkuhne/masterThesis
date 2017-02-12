@@ -11,15 +11,16 @@ classdef solROAprog < handle
         orthant = char.empty;       %search direction
        
         sol = spotprogsol.empty;    %solution of recent optimization
-
+        options = struct.empty;
     end
           
     methods
         
-        function obj = solROAprog(poly,rho_extr,orthant)
+        function obj = solROAprog(poly,rho_extr,options,orthant)
         
             if nargin == 2
                 orthant = 'symm';
+                options = struct.empty;
             end
             
             if nargin<2
@@ -55,7 +56,7 @@ classdef solROAprog < handle
             obj.poly = poly;
             obj.orthant = orthant;
             obj.rho_extr = rho_extr;
-
+            obj.options = options;
         
         end
         
