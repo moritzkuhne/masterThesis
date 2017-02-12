@@ -9,59 +9,35 @@ function [solution,decisionVar] = ROAProg(dV,V,inequalities,...
 %ROAPROG This function sets-up and solves estimatie ROA optimization prob. 
 %   Detailed explanation goes here
 
-%setting up the initial and extreme rho values
-rho_try = 0;            %current rho value up for optimization 
+%setting up the initial and extreme rho values 
 rho_extr = 5;         %maximum rho value of interesst  
 rho_failed = rho_extr;  %lowest rho value for which prog. failed
 
 %initiate the solution to the ROAprog
-solution = solROAprog(-dV,rho_extr,'pos');
+solution = solROAprog(-dV,rho_extr,options,'pos');
 
-a = 0.001;
-while ~(rho_try-solution.rho <= a && rho_try ~= 0) && ...
-        ~(solution.rho_extr-solution.rho <= a) && ... 
-        ~(rho_failed-solution.rho <= a)
+terminate = false;
+while ~terminate
 
+    % step 1
+    [rho_try,options] = fixRho(solution,rho_failed,options);
+    
+    % step 2
     [sol,decisionVar] = method(-dV,[(rho_try-V),inequalities],deg,options);
     
-    if sol.isPrimalFeasible()
-        for i=1:length(decisionVar)
-            opt_Qset{i} = double(sol.eval(decisionVar{i}));
-             %length(decisionVar{1}) all elements in decisionVar are...
-             %the same length, so length(decisionVar(1)) is constant
-        end
-        
-        if ~isempty(sol.gramMatrices)
-            Q = double(sol.eval(sol.gramMatrices{1}));
-            isDSOS(Q)
-        else
-            Q = [];
-        end
-
-        [DSOSfeasibility,violation] = isDSOS(blkdiag(Q,opt_Qset{:}));
-
-        if DSOSfeasibility
-            feasibility = true;
-            solution.sol = sol;
-
-            if rho_try > 0.5
-                save('INFEASIBLESOLUTION.mat','solution')
-            end
-            
-        else
-            feasibility = false; violation
-        end
-        
+    % step 3
+    [feasibility,violation] = isPSDprogFeasible(sol,decisionVar)
+    
+    [terminate,options] = isBreak(solution,rho_try,rho_failed,options);
+    
+    if feasibility
+        solution.rho = rho_try;
+        solution.sol = sol;
+        solution.options = options;
     else
-        feasibility = false;
-        
+        rho_failed = rho_try;
     end
-    solution.rho
-    % determine new rho_try (aka expand domain)
-    [rho_try,rho_failed] = bisectInterval(solution,...
-        feasibility,rho_try,rho_failed)
-    solution.rho
+    
 end
 
 end
-
