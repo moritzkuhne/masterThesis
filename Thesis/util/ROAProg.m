@@ -30,12 +30,24 @@ while ~(rho_try-solution.rho <= a && rho_try ~= 0) && ...
              %length(decisionVar{1}) all elements in decisionVar are...
              %the same length, so length(decisionVar(1)) is constant
         end
-                
-        [DSOSfeasibility,violation] = isDSOS(blkdiag(opt_Qset{:}));
+        
+        if ~isempty(sol.gramMatrices)
+            Q = double(sol.eval(sol.gramMatrices{1}));
+            isDSOS(Q)
+        else
+            Q = [];
+        end
+
+        [DSOSfeasibility,violation] = isDSOS(blkdiag(Q,opt_Qset{:}));
 
         if DSOSfeasibility
             feasibility = true;
             solution.sol = sol;
+
+            if rho_try > 0.5
+                save('INFEASIBLESOLUTION.mat','solution')
+            end
+            
         else
             feasibility = false; violation
         end
@@ -44,11 +56,11 @@ while ~(rho_try-solution.rho <= a && rho_try ~= 0) && ...
         feasibility = false;
         
     end
-    
+    solution.rho
     % determine new rho_try (aka expand domain)
     [rho_try,rho_failed] = bisectInterval(solution,...
         feasibility,rho_try,rho_failed)
-    
+    solution.rho
 end
 
 end
