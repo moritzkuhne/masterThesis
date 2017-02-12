@@ -20,17 +20,23 @@ params.FeasibilityTol = 1E-2; %default 1E-6
 
 %setting options
 options.solverOptions = params;
+options.solver = @spot_gurobi;
 
-% method = @PsatzProg;evalMethod = @evalROAProgDSOS; deg = 2; options.objective = '0';
+ method = @PsatzProg;evalMethod = @evalROAProgDSOS; deg = 2; options.objective = '0';
 % method = @kSprocedureProg;evalMethod = @evalROAProgDSOS; deg = 2; options.k = 2; options.objective = '0';
 % method = @SprocedureProg;evalMethod = @evalROAProgDSOS; deg = 3; options.objective = '0';
 % method = @HandelmanAndDSOSProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
 % method = @HandelmanProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
 
-
-[solution,decisionVar] = ROAProg(dV,V,inequalities,method,deg,options);
-rho_certified_ = evalMethod(solution,decisionVar);
-
+i_upper = 100;
+rho_table = zeros(i_upper,1);
+tic
+for i=1:i_upper
+    [solution,decisionVar] = ROAProg(dV,V,inequalities,method,deg,options);
+    %rho_certified = evalMethod(solution,decisionVar);
+    rho_table(i) = solution.rho;
+end
+time = toc
 
 
 

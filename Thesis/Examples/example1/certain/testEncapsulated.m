@@ -1,5 +1,3 @@
-
-
 % initiate polynomials
 x = msspoly('x',1);     %state variables 
 
@@ -12,7 +10,7 @@ inequalities = [];
 
 %method = @PsatzProg;evalMethod = @evalROAProgDSOS; deg = 2; options.objective = '0';
 %method = @kSprocedureProg;evalMethod = @evalROAProgDSOS; deg = 2; options.k = 2; options.objective = '0';
-%method = @SprocedureProg;evalMethod = @evalROAProgDSOS; deg = 3; options.objective = '0';
+method = @SprocedureProg;evalMethod = @evalROAProgDSOS; deg = 3; options.objective = '0';
 %method = @HandelmanAndDSOSProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
 %method = @HandelmanProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
 
