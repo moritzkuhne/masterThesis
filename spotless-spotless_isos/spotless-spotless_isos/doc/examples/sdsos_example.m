@@ -39,17 +39,20 @@ prog = prog.withDSOS((p - gamma*(x'*x)^2)); % Only line that changes between DSO
 
 % MOSEK options
 options = spot_sdp_default_options();
-options.solveroptions.MSK_IPAR_BI_CLEAN_OPTIMIZER = 'MSK_OPTIMIZER_INTPNT'; % Use just the interior point algorithm to clean up
-options.solveroptions.MSK_IPAR_INTPNT_BASIS = 'MSK_BI_NEVER'; % Don't use basis identification (it's slow)
+% options.solveroptions.MSK_IPAR_BI_CLEAN_OPTIMIZER = 'MSK_OPTIMIZER_INTPNT'; % Use just the interior point algorithm to clean up
+% options.solveroptions.MSK_IPAR_INTPNT_BASIS = 'MSK_BI_NEVER'; % Don't use basis identification (it's slow)
 
 % Solve program
-sol = prog.minimize(-gamma, @spot_mosek, options);
+sol = prog.minimize(-gamma, @spot_gurobi, options);
 
 % Optimal value
 opt_dsos = double(sol.eval(gamma));
 
 disp(['Optimal value (DSOS): ' num2str(opt_dsos)])
 
+Q = double(sol.eval(sol.gramMatrices{1}));
+DSOS = sol.gramMonomials{1}.'*Q*sol.gramMonomials{1};
+(p - opt_dsos*(x'*x)^2)-DSOS
 %% SDSOS program (Same as DSOS program, except the line prog = prog.withDSOS(...) is now prog = prog.withSDSOS(...)
 
 % Initialize program
