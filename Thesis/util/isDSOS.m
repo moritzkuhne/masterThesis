@@ -8,9 +8,13 @@ function [feasibility,violation] = isDSOS(Q)
     violation = [];
 
     for i=1:size(Q,1)
-        if 2*abs(Q(i,i))<sum(abs(Q(i,:))) %reformulation of DSOS constraint
-            %feasibility = false;   
-            violation = strcat(violation,'DSOS');
+        if ~(2*Q(i,i)>=sum(abs(Q(i,:)))) %reformulation of DSOS constraint
+            %feasibility = false;
+            if size(violation) == 0
+                    violation = strcat(violation,'DSOS');
+                else
+                    violation = strcat(violation,', DSOS');
+            end
 
             %test eigenvalues
             if ~all(eig(Q)>=0) == 1
@@ -34,8 +38,5 @@ function [feasibility,violation] = isDSOS(Q)
             violation = strcat(violation,', symmetry');
         end
     end
-
-    %test DSOS constraint
-
 
 end
