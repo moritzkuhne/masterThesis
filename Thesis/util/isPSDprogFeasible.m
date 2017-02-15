@@ -1,27 +1,49 @@
-function [feasibility,violation] = isPSDprogFeasible(sol,decisionVar)
+function [feasibility,violation,options] =...
+    isPSDprogFeasible(sol,objective,options)
 %ISPSDPROGFEASIBLE 
 %   Detailed explanation goes here
 
+if isfield(options,'feasibilityTest')
+    if ~(strcmp(options.feasibilityTest,'numerical') ||...
+            strcmp(options.feasibilityTest,'analytical'))
+        error('Feasibility test is not supported.')
+    else
+        feasibilityTest = options.feasibilityTest;
+    end
+else
+    feasibilityTest = 'numerical';
+    options.feasibilityTest = feasibilityTest;
+end
+
 if sol.isPrimalFeasible()
     
-    if ~isempty(sol.gramMatrices) 
-        Q = double(sol.eval(sol.gramMatrices{1}));
+    objective_opt = double(sol.eval(objective));
+    if ~(objective_opt<=0)
+        
+        feasibility = false;
+        violation = 'objective';
+        
     else
-        Q = [];
+        feasibility = true;
+        
+           if strcmp(feasibilityTest,'analytical')
+            
+                if ~isempty(sol.gramMatrices) 
+                    for i=1:length(sol.gramMatrices)
+                        Qset{i} = double(sol.eval(sol.gramMatrices{i}));
+                    end
+                else
+                    Qset = [];
+                end
+
+                [feasibility,violation] = isDSOS(blkdiag(Qset{:}));
+           else
+               violation = [];
+           end
     end
-    
-    if length(decisionVar)>0
-        for i=1:length(decisionVar)
-            opt_Qset{i} = double(sol.eval(decisionVar{i}));
-        end
-    end
-    
-    [feasibility,violation] = isDSOS(blkdiag(Q,opt_Qset{:})); %we...
-    % may test Q and decision variables in one step as putting them on the
-    % diagonal preserves the structure and does not affact the stability of
-    % circle theorem nor eig() in Matlab. Matlab will break it into blocks
     
 else
+    
     feasibility = false;
     violation = ('Infeasible Primal Problem');
 

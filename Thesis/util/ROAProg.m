@@ -1,16 +1,15 @@
-% to do:    post processing: check if all multipliers are DSOS and ...
-%                            check solution/ accuracy of solver somehow
+% to do:    PASS rho vecotrs to program
 %           this function works so far only for psatz and k-s-procedure!
 %           we need to handle vector of decsion variable instead of set for
 %           handelman representation!
 
-function [solution,decisionVar] = ROAProg(dV,V,inequalities,...
+function [solution,options] = ROAProg(dV,V,inequalities,...
     method,deg,options)
 %ROAPROG This function sets-up and solves estimatie ROA optimization prob. 
 %   Detailed explanation goes here
 
 %setting up the initial and extreme rho values 
-rho_extr = 5;         %maximum rho value of interesst  
+rho_extr = 1.1;         %maximum rho value of interesst  
 rho_failed = rho_extr;  %lowest rho value for which prog. failed
 
 %initiate the solution to the ROAprog
@@ -23,10 +22,15 @@ while ~terminate
     [rho_try,options] = fixRho(solution,rho_failed,options);
     
     % step 2
-    [sol,decisionVar] = method(-dV,[(rho_try-V),inequalities],deg,options);
+    [sol,objective,options] = method(-dV,V,[(rho_try-V),inequalities],deg,options);
     
     % step 3
-    [feasibility,violation] = isPSDprogFeasible(sol,decisionVar);
+    [feasibility,violation,options] = ...
+        isPSDprogFeasible(sol,objective,options);
+%     if strcmp(violation,'DSOS, eigenvalues')
+%         save('INFEASIBLESOLUTION.mat','sol','decisionVar','rho_try')
+%     end
+%     pause
     
     [terminate,options] = isTerminate(solution,rho_try,rho_failed,options);
     

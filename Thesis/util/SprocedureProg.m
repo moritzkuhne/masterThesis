@@ -1,9 +1,7 @@
-% TO DO:    add possibility to switch between multipliers
-%           add possibility to chose obj. function
-%           add possibility to pass solver options
+% TO DO:   
 %           test what happens if indet are called z (like monomials)
 
-function [solution,Qset] = SprocedureProg(poly,inequalities,deg,options)
+function [solution,objective,options] = SprocedureProg(poly,V,inequalities,deg,options)
 %SPROCEDUREPROG Sets up S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -11,41 +9,36 @@ function [solution,Qset] = SprocedureProg(poly,inequalities,deg,options)
 %   returns solution and returns a cell with entries the DD matrixes
 %   Detailed explanation goes here
 
-    if nargin < 4
+    if nargin < 5
         options = [];
     end
     [indet,~,~] = decomp([poly; inequalities.']);
-    z = monomials(indet,0:deg);
 
     %initiate program
     prog = spotsosprog;
     prog = prog.withIndeterminate(indet);
 
-    % setting up DSOS polynomial multipliers
-    [prog,Qset] = prog.newDDSet(length(z),length(inequalities));
-
+    %set up DSOS multipliers
+    z = monomials(indet,0:deg);
+    [prog,DSOSPoly,~] = newDSOSPoly(prog,z,length(inequalities));
     for i=1:length(inequalities)
 
         if ~exist('S', 'var')
-            S = (z.'*Qset{i}*z)*inequalities(i);
+            S = DSOSPoly(i)*inequalities(i);
         else
-            S = S + (z.'*Qset{i}*z)*inequalities(i);
+            S = S + DSOSPoly(i)*inequalities(i);
         end
 
-    end
-
-    % DSOS constraint
-    prog = prog.withDSOS((poly-S));
+    end   
+    
+    %Add slack to optimization problem to increase numerical robustness
+    [prog,objective,slack,options] = objectiveROAProgDSOS(prog,V,options);
+    
+    %DSOS constraint
+    prog = prog.withDSOS((poly-S-slack));
 
     %set solver and its options
-    [solver,spotOptions] = solverOptionsPSDProg(options);
-
-    %define objective function
-    if isfield(options,'objective')
-        objective = objectiveROAProgDSOS(options.objective,Qset);
-    else
-        objective = 0;
-    end
+    [solver,spotOptions,options] = solverOptionsPSDProg(options);
 
     % Solve program
     solution = prog.minimize(objective, solver, spotOptions);

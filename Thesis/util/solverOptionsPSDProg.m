@@ -1,4 +1,4 @@
-function [solver,spotOptions] = solverOptionsPSDProg(options)
+function [solver,spotOptions,options] = solverOptionsPSDProg(options)
 %SOLVEROPTIONSPSDPROG The options for solver and solver options arefiltered
 %out from the input options
 
@@ -9,6 +9,7 @@ if isfield(options,'solver')
     solver = options.solver;
 else
     solver = @spot_gurobi;
+    options.solver = solver;
 end
 
 %set solver options
@@ -17,6 +18,7 @@ if isfield(options,'solverOptions')
     spotOptions.solver_options = options.solverOptions;
 else
     spotOptions.solver_options = struct();
+    options.solverOptions = spotOptions.solver_options;
 end
 
 end
