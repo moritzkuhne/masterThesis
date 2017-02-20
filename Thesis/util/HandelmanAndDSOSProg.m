@@ -1,12 +1,6 @@
-% TO DO:    add possibility to switch between multipliers
-%           add possibility to chose obj. function
-%           add possibility to pass solver options
-%           add additional argout which specifies the decision var.
-%           test what happens if indet are called z (like monomials)
-%           test weather inequalities indet. match poly indet. 
+% TO DO:    
 
-function [solution,lambda] = HandelmanAndDSOSProg(poly,inequalities,...
-    deg,options)
+function [solution,objective,options] = HandelmanAndDSOSProg(poly,system,inequalities,deg,options)
 %HandelmanAndDSOS Sets up Handelman programm constrained to DSOS 
 % in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
@@ -15,7 +9,7 @@ function [solution,lambda] = HandelmanAndDSOSProg(poly,inequalities,...
 %   returns solution and returns a cell with entries the DD matrixes
 %   Detailed explanation goes here
 
-    if nargin < 4
+    if nargin < 5
         options = [];
     end
 
@@ -26,22 +20,18 @@ function [solution,lambda] = HandelmanAndDSOSProg(poly,inequalities,...
     prog = spotsosprog;
     prog = prog.withIndeterminate(indet);
     
+    %Add slack to optimization problem to increase numerical robustness
+    [prog,objective,slack,options] = objectiveROAProgScalar(prog,system,options);
+    
     % add nonlinear multipliers
     [prog,lambda] = prog.newPos(length(mMonoid));
-    prog = prog.withDSOS(poly-lambda.'*mMonoid);
-    
+    prog = prog.withDSOS(poly-lambda.'*mMonoid-slack);
+        
     %set solver and its options
-    [solver,spotOptions] = solverOptionsPSDProg(options);
-
-    %define objective function
-    if isfield(options,'objective')
-        objective = objectiveROAProgScalar(options.objective,lambda);
-    else
-        objective = 0;
-    end
+    [solver,spotOptions,options] = solverOptionsPSDProg(options);
     
     % Solve program
-    solution = prog.minimize(objective, solver, spotOptions);
+    solution = prog.minimize(objective, solver, spotOptions); 
     
 end
 

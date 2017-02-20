@@ -27,15 +27,7 @@ if sol.isPrimalFeasible()
         feasibility = true;
         
            if strcmp(feasibilityTest,'analytical')
-            
-                if ~isempty(sol.gramMatrices) 
-                    for i=1:length(sol.gramMatrices)
-                        Qset{i} = double(sol.eval(sol.gramMatrices{i}));
-                    end
-                else
-                    Qset = [];
-                end
-
+                Qset = evalMultipliers(sol);
                 [feasibility,violation] = isDSOS(blkdiag(Qset{:}));
            else
                violation = [];

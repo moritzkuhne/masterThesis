@@ -31,7 +31,7 @@ switch objetiveOption
         indets = [system.states; system.parameters];
         slack = slackVar*indets.'*indets;
         objective = -slackVar;
-%         
+        
 %     case 'trace'
 %         slack = 0;
 %         objective = trace(blkdiag(Qset{:})...
@@ -39,8 +39,8 @@ switch objetiveOption
 %             %all Qset{:} all the same size, therefore length(Qset{1});
             
     otherwise
-        warning('Method is unknown, objecive is set to default (0)')
-        objective = 0;
+        warning('Method is unknown, objecive is set to default Lyap')
+        [prog,objective,slack,options] = objectiveROAProgDSOS(prog,system,[]);
         
 end
 
