@@ -1,7 +1,7 @@
 % TO DO:   
 %           test what happens if indet are called z (like monomials)
 
-function [solution,objective,options] = SprocedureProg(poly,V,inequalities,deg,options)
+function [solution,objective,options] = SprocedureProg(poly,system,inequalities,deg,options)
 %SPROCEDUREPROG Sets up S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -32,7 +32,7 @@ function [solution,objective,options] = SprocedureProg(poly,V,inequalities,deg,o
     end   
     
     %Add slack to optimization problem to increase numerical robustness
-    [prog,objective,slack,options] = objectiveROAProgDSOS(prog,V,options);
+    [prog,objective,slack,options] = objectiveROAProgDSOS(prog,system,options);
     
     %DSOS constraint
     prog = prog.withDSOS((poly-S-slack));

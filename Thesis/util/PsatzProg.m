@@ -2,7 +2,7 @@
 %           add possibility to change degree of g, or make it auto dectect!
 %           add detection to which power of g is used
 
-function [solution,objective,options] = PsatzProg(poly,V,inequalities,...
+function [solution,objective,options] = PsatzProg(poly,system,inequalities,...
     deg,options)
 %PsatzProg Sets up Positivstllensatz programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
@@ -38,7 +38,7 @@ function [solution,objective,options] = PsatzProg(poly,V,inequalities,...
     end
     
     %Add slack to optimization problem to increase numerical robustness
-    [prog,objective,slack,options] = objectiveROAProgDSOS(prog,V,options);
+    [prog,objective,slack,options] = objectiveROAProgDSOS(prog,system,options);
     
     prog = prog.withDSOS((-S-poly^2-slack));
     %prog = prog.withDSOS((-S-1-slack));

@@ -16,10 +16,10 @@ end
         deg = options.methodOptions.deg;
     else
         deg = 2;
-        options.methodOptions.deg = deg
+        options.methodOptions.deg = deg;
     end
 
-if isequalt(method,@kSprocedureProg
+if isequal(method,@kSprocedureProg)
     if ~isfield(options.methodOptions,'k')
         options.methodOptions.k = 2;
     end

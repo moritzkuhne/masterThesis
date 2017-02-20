@@ -4,58 +4,27 @@ classdef solROAprog < handle
 
     properties (Access = public)
         
-        poly = msspoly.empty;       %polynomial tested to be PSD
-        
-        rho = 0;                   %certified rho value
-        rho_extr = [];              %extreme rho value
-        orthant = char.empty;       %search direction
-       
-        sol = spotprogsol.empty;    %solution of recent optimization
+        system = dynamicalSystem.empty;
         options = struct.empty;
+        
+        rho = [];                   %certified rho value
+        rho_extr = [];              %extreme rho value     
+        sol = spotprogsol.empty;    %solution of recent optimization
+
     end
           
     methods
         
-        function obj = solROAprog(poly,rho_extr,options,orthant)
+        function obj = solROAprog(system,options)
         
-            if nargin == 2
-                orthant = 'symm';
+            if nargin == 1
                 options = struct.empty;
+                options.rho = [0 1];
             end
             
-            if nargin<2
-                error('Not enough input arguments!')
-            end
-            
-            if ~(isa(poly,'msspoly'))
-                error('First argument needs to be an msspoly')
-            end
-            
-            if ~(strcmp(orthant,'pos') || strcmp(orthant,'neg')...
-                    || strcmp(orthant,'symm'))
-                error(['third argument needs to be ','''pos'' ',...
-                    '''neg'' ', 'or ','''symm''.']) 
-            end
-
-            switch orthant
-            
-                case {'pos', 'symm'}
-                    if ~(rho_extr>=0) 
-                        error(['Maximum rho needs to be ',...
-                            'larger then initial rho.']);
-                    end
-                    
-                case 'neg'
-                    if ~(0>=rho_extr) 
-                        error(['Minimum rho needs to be ',...
-                            'smaller then initial rho.']);
-                    end
-                    
-            end
-            
-            obj.poly = poly;
-            obj.orthant = orthant;
-            obj.rho_extr = rho_extr;
+            obj.system = system;
+            obj.rho = options.rho(1);
+            obj.rho_extr = options.rho(2);
             obj.options = options;
         
         end

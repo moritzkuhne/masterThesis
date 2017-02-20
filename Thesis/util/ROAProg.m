@@ -3,18 +3,21 @@
 %           we need to handle vector of decsion variable instead of set for
 %           handelman representation!
 
-function [solution,options] = ROAProg(dV,V,inequalities,options)
+function [solution,options] = ROAProg(system,options)
 %ROAPROG This function sets-up and solves estimatie ROA optimization prob. 
 %   Detailed explanation goes here
 
-%setting up the initial and extreme rho values 
-rho_extr = 1.1;         %maximum rho value of interesst  
-rho_failed = rho_extr;  %lowest rho value for which prog. failed
-
 %initiate the solution to the ROAprog
-solution = solROAprog(-dV,rho_extr,options,'pos');
-terminate = false;
+solution = solROAprog(system,options);
 
+V = system.V;
+dV = diff(system.V,system.states)*system.dx;
+inequalities = system.inequCon;
+
+
+%preloop assinments
+terminate = false;
+rho_failed = solution.rho_extr;
 while ~terminate
 
     % step 1
@@ -22,15 +25,11 @@ while ~terminate
     
     % step 2
     [method,deg,options] = methodOptionsROAProg(options);
-    [sol,objective,options] = method(-dV,V,[(rho_try-V),inequalities],deg,options);
+    [sol,objective,options] = method(-dV,system,[(rho_try-V),inequalities],deg,options);
     
     % step 3
     [feasibility,violation,options] = ...
         isPSDprogFeasible(sol,objective,options);
-%     if strcmp(violation,'DSOS, eigenvalues')
-%         save('INFEASIBLESOLUTION.mat','sol','decisionVar','rho_try')
-%     end
-%     pause
     
     [terminate,options] = isTerminate(solution,rho_try,rho_failed,options);
     

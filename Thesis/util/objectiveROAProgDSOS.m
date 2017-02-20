@@ -1,4 +1,4 @@
-function [prog,objective,slack,options] = objectiveROAProgDSOS(prog,V,options)
+function [prog,objective,slack,options] = objectiveROAProgDSOS(prog,system,options)
 %OBJECTIVEROAPROGDSOS Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -18,18 +18,19 @@ switch objetiveOption
 
     case 'Lyap'
         [prog,slackVar] = prog.newPos(1);
-        slack = slackVar*V;
+        slack = slackVar*system.V;
         objective = -slackVar;
         
-%     case 'states'
-%         [prog,slack] = prog.newPos(1);
-%         slack = slackVar*states.'*states;
-%         objective = -slackVar;
-%         
-%     case 'indets'
-%         [prog,slack] = prog.newPos(1);
-%         slack = slackVar*indets.'*indets;
-%         objective = -slackVar;
+    case 'states'
+        [prog,slackVar] = prog.newPos(1);
+        slack = slackVar*system.states.'*system.states;
+        objective = -slackVar;
+        
+    case 'indets'
+        [prog,slackVar] = prog.newPos(1);
+        indets = [system.states; system.parameters];
+        slack = slackVar*indets.'*indets;
+        objective = -slackVar;
 %         
 %     case 'trace'
 %         slack = 0;
