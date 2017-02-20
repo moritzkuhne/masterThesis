@@ -9,15 +9,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %close all; 
-clear all; clc;
+close all; clear all; clc;
 disp('intialization');
 
-system = @eom;
+EOM = @eom;
 
 %% draw phase portrai 
 disp('draw phase portrai')
 
-fig = phasePortrai2D(system);
+fig = phasePortrai2D(EOM);
 %% this block was used once to determine an initial condition on the limit
 %  cycle and the time of period
 % disp('determine periodicity and solution')
@@ -33,7 +33,7 @@ Y0 = [2.003602513881589; 0.152170514312629];
 tspan = [0, 13.326573700340958/2];
 
 hold on
-[t,y] = drawTrajectory(system,Y0,tspan);
+[t,y] = drawTrajectory(EOM,Y0,tspan);
 save('trajectory','t','y');
 
 %% calculate transverse dynamics
@@ -48,40 +48,60 @@ for i=1:length(tau)
 %i=1; %LOOP FOR TAU 
 
 x_transverse = msspoly('x_t',1);
-[dx_transverse] = transverseDynamics(system,x_interp(i,:),tau(i),x_transverse);
+parameters = [];
+
+[dx_transverse] = transverseDynamics(EOM,x_interp(i,:),...
+    tau(i),x_transverse);
+
+dx_transverse = removeConstant(dx_transverse);
+
+inequalties = [];
+equalities = [];
+
+system = dynamicalSystem(dx_transverse,inequalties,equalities,...
+    x_transverse,parameters);
+system.V
 
 %% create initial Lyapunov function for (linearized) system
-disp('crate initial Lyapunov function')
-
-V = 0.5*(x_transverse.'*x_transverse);
-
+% disp('crate initial Lyapunov function')
+% 
+% V = 0.5*(x_transverse.'*x_transverse);
 %% find maximum level set of V for which system is stable
 disp('find maximum level set of V for which system is stable')
 
-dV = diff(V,x_transverse)*dx_transverse;
+%% setting options
+disp('Setting the options for ROAprog.')
 
-inequalities = [];
-%setting gurobi options
+options.rho = [0 5];
+options.lineSearchMethod = 'bisect';
+options.lineSearchMethodOptions = 'random'; %this line does not do anything yet
+options.objective = 'Lyap'; 
+options.feasibilityTest = 'analytical';
+
+%options.objective = '0'; 
+%options.feasibilityTest = 'numerical';
+
+%setting solver options
+options.solver = @spot_gurobi;
 params.method = 0; %default 0 (primal simplex)
-params.FeasibilityTol = 1E-9; %default 1E-6
-
-%setting options
+params.FeasibilityTol = 1E-6; %default 1E-6
+params.outputFlag = 0;
 options.solverOptions = params;
 
-%method = @PsatzProg;evalMethod = @evalROAProgDSOS; deg = 2; options.objective = '0';
-%method = @kSprocedureProg;evalMethod = @evalROAProgDSOS; deg = 2; options.k = 2; options.objective = '0';
-method = @SprocedureProg;evalMethod = @evalROAProgDSOS; deg = 3; options.objective = '0';
-%method = @HandelmanAndDSOSProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
-%method = @HandelmanProg; evalMethod = @evalROAProgScalar; deg = 5; options.objective = '0';
+options.method = @SprocedureProg; options.methodOptions.deg = 2; 
+%options.method = @kSprocedureProg; options.methodOptions.deg = 4; options.methodOptions.k = 2;
+%options.method = @PsatzProg; options.methodOptions.deg = 4; 
 
-[solution,decisionVar] = ROAProg(dV,V,inequalities,method,deg,options);
-rho_table(i) = evalMethod(solution,decisionVar);
+%% run ROAprog
+disp('Running the ROAprog.')
+[solution,options] = ROAProg(system,options);
+rho_table(i) = solution.rho;
 
 %% draw transversal plains 
 disp('draw transversal plains')
 
 length = sqrt(2*rho_table(i));
-drawTransversalPlain2D(system,tau(i),x_interp(i,:),length);
+drawTransversalPlain2D(EOM,tau(i),x_interp(i,:),length);
 
 end
 
