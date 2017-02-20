@@ -7,8 +7,7 @@ if isfield(options,'lineSearchMethod')
         case 'bisect'
             method = @terminateBisect;
         case 'step'
-            method = @terminatestep;
-            error('step search is not supported yet!')
+            method = @terminateStep;
         otherwise
             error('option is not supported! Choose bisect or step.')
     end
