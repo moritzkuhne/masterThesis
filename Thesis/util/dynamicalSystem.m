@@ -4,14 +4,14 @@ classdef dynamicalSystem < handle
 
     properties (Access = public)
         
-        dx = msspoly.empty;
-        inequCon = msspoly.empty;
-        equCon = msspoly.empty;
+        dx = [];
+        inequCon = [];
+        equCon = [];
         
-        states = msspoly.empty;
-        parameters = msspoly.empty;
+        states = [];
+        parameters = [];
 
-        V = msspoly.empty;
+        V = [];
         rho = [];
     end
           
@@ -35,6 +35,8 @@ classdef dynamicalSystem < handle
         function V = findCandidate(obj)
             [~,A] = linearizeDynamicalSystem(obj);
             Q = eye(length(obj.states)); 
+            size(A)
+            size(Q)
             P = lyap(A,Q); P = 1/det(P)*P;
             
             V = obj.states.'*P*obj.states;
