@@ -59,8 +59,7 @@ inequalties = [];
 equalities = [];
 
 system = dynamicalSystem(dx_transverse,inequalties,equalities,...
-    x_transverse,parameters);
-system.V
+    x_transverse,parameters,x_transverse.'*x_transverse);
 
 %% create initial Lyapunov function for (linearized) system
 % disp('crate initial Lyapunov function')
@@ -78,8 +77,8 @@ options.lineSearchMethodOptions = 'random'; %this line does not do anything yet
 options.objective = 'Lyap'; 
 options.feasibilityTest = 'analytical';
 
-%options.objective = '0'; 
-%options.feasibilityTest = 'numerical';
+% options.objective = '0'; 
+% options.feasibilityTest = 'numerical';
 
 %setting solver options
 options.solver = @spot_gurobi;
@@ -88,9 +87,9 @@ params.FeasibilityTol = 1E-6; %default 1E-6
 params.outputFlag = 0;
 options.solverOptions = params;
 
-options.method = @SprocedureProg; options.methodOptions.deg = 2; 
+%options.method = @SprocedureProg; options.methodOptions.deg = 4; 
 %options.method = @kSprocedureProg; options.methodOptions.deg = 4; options.methodOptions.k = 2;
-%options.method = @PsatzProg; options.methodOptions.deg = 4; 
+options.method = @PsatzProg; options.methodOptions.deg = 4; 
 
 %% run ROAprog
 disp('Running the ROAprog.')
@@ -100,7 +99,7 @@ rho_table(i) = solution.rho;
 %% draw transversal plains 
 disp('draw transversal plains')
 
-length = sqrt(2*rho_table(i));
+length = sqrt(rho_table(i));
 drawTransversalPlain2D(EOM,tau(i),x_interp(i,:),length);
 
 end
