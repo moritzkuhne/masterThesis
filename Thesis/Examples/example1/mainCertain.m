@@ -4,7 +4,7 @@ close all; clear all; clc;
 disp('Setting up the dynamical system.')
 % initiate polynomials
 x = msspoly('x',1);     %state variables 
-parameters = msspoly.empty;
+parameters = [];
 
 dx = x^2-x;
 inequalities = [];
