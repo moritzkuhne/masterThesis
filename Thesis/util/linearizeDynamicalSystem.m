@@ -1,45 +1,60 @@
 %to do:     multivariable/multidimensional system
 %           whats about B C D
 
-function [dynamicalSystem_lin,A] = linearizeDynamicalSystem(system,states)
+function [dx_lin,A] = linearizeDynamicalSystem(system)
 %LINEARIZEDYNAMICALSYSTEM This function returns a linearized system to an
 %mss-poly system
 %   So far, only passive systems are considered, e.g. it is only linearized
 %   for A matrix.
 %   More explenation here
 
-error('under construction')
+% x = msspoly('x',2);
+% a = msspoly('a',1);
+% 
+% dx = [x(1)*a + x(2)*x(1); x(2)*a];
 
-system = @eom;
-states = msspoly('x',2);
-
-dynamics = eom([],states)
-%%
-[indet,powers,M] = decomp(dynamicalSystem);
+[indet,powers,M] = decomp(system.dx);
+mtch_states = match(indet,system.states);
+if ~isempty(system.parameters)
+    mtch_parameters = match(indet,system.parameters);
+end
+% mtch_states = match(indet,x);
+% mtch_parameters = match(indet,a);
 
 for i=1:length(powers)
     
-    if sum(powers(i,:),2)~=1
-       %powers(i,:) = zeros(1,length(indet));
-       M(1,i) = 0; %does the same but maybe prob. for multidim cases
+    if sum(powers(i,mtch_states),2) > 1
+        M(:,i) = zeros(size(M,1),1);
     end
     
+    if ~isempty(system.parameters)
+        if sum(powers(i,mtch_parameters),2) > 1
+            error('dynamical system needs to be linear in parameters')
+        end
+    end
+
 end
 
-dynamicalSystem_lin = recomp(indet,powers,M);
-[~,~,A] = decomp(dynamicalSystem_lin);
+dx_lin = recomp(indet,powers,M);
+[~,~,A] = decomp(dx_lin);
 
-end
+%% so far uncertain systems are not supported!
+% [indet,powers,M] = decomp(dx);
+% mtch_parameters = match(indet,a);
 % 
-% function dY = eom(T,Y,Y0)
-% Y1 = Y(1);
-% Y2 = Y(2);
-% 
-% %% van der pol osscillator
-% mu = 1;
-% 
-% Y1dot = Y2;
-% Y2dot = -Y1+mu*(1-Y1^2)*Y2;
-% 
-% dY = [Y1dot; Y2dot];
+% if ~isempty(mtch_parameters)
+%     for i=1:length(mtch_parameters)
+%         for j=1:size(powers,2)
+%             if powers(mtch_parameters(i),j) == 1
+%                B = indet(mtch_parameters(i))*M(:,i);
+%             end
+%         end
+%     end   
 % end
+
+end
+
+
+
+
+
