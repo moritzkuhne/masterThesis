@@ -1,7 +1,7 @@
 % reporting: the problem is JUST feasible, i.e. objective needs to be 0
 %           for the same reason KSprocedure and PSatz strugle!  
 %           on the other hand, deg = 0 does an awesome job!
-%            
+%           Handelman fails, but HandelmanDSOS sucesses (of course it does)
 
 % example 4.1 in Sankaranarayanan2013
 close all; clear all; clc;
@@ -37,6 +37,8 @@ params.outputFlag = 0;
 options.solverOptions = params;
 
 options.method = @SprocedureProg; options.methodOptions.deg = 0; 
+option.method = @HandelmanAndDSOSProg; options.methodOptions.deg = 0;
+% options.method = @HandelmanProg; options.methodOptions.deg = 2;
 
 %% run ROAprog
 disp('Running the ROAprog.')
