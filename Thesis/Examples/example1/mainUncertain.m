@@ -18,7 +18,7 @@ system = dynamicalSystem(dx,inequalities,equalities,x,a,V);
 %% setting options
 disp('Setting the options for ROAprog.')
 
-options.rho = [0 0.5];
+options.rho = [0 1];
 options.lineSearchMethod = 'bisect';
 options.lineSearchMethodOptions = 'random'; %this line does not do anything yet
 options.objective = 'Lyap'; 
@@ -34,9 +34,9 @@ params.FeasibilityTol = 1E-6; %default 1E-6
 params.outputFlag = 0;
 options.solverOptions = params;
 
-%options.method = @SprocedureProg; options.methodOptions.deg = 4; 
-%options.method = @kSprocedureProg; options.methodOptions.deg = 4; options.methodOptions.k = 2;
-options.method = @PsatzProg; options.methodOptions.deg = 4; 
+% options.method = @SprocedureProg; options.methodOptions.deg = 7; 
+options.method = @kSprocedureProg; options.methodOptions.deg = 4; options.methodOptions.k = 2;
+% options.method = @PsatzProg; options.methodOptions.deg = 3; 
 
 %% run ROAprog
 disp('Running the ROAprog.')

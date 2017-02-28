@@ -1,5 +1,7 @@
 function evalAndPlot(plot_problem)
 
+plot_problem = [];
+
 matFile = strcat('option',num2str(plot_problem(1)),'.mat');
 load(matFile);
 rho_tables = zeros(length(solution_table),length(plot_problem));
@@ -16,22 +18,25 @@ for i=1:length(plot_problem)
 end
 
 %% Plotting
-colors = {'k','b','r'};
+colors = {'kx','bx','rx'};
+colorsLine = {'k','b','r'};
 
 %plotting rho distribution
 figure()
 hold on;
 for i=1:length(plot_problem)
-    stairs([1:length(rho_tables(:,i))],rho_tables(:,i),...
-        colors{i},'linewidth',1.5);
-    h = plot([0 length(rho_tables(:,i))],[rho_averages(i) rho_averages(i)],...
-        colors{i},'linewidth',1.5);
-    set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
+    plot([1:length(rho_tables(:,i))],rho_tables(:,i),...
+        colors{i},'markersize',10,'linewidth',1.5);
+   h = plot([0 length(rho_tables(:,i))],[rho_averages(i) rho_averages(i)],...
+       colorsLine{i},'linewidth',1.5);
+   set(get(get(h,'Annotation'),'LegendInformation'),'IconDisplayStyle','off');
     ylabel('\rho')
-    xlabel('% of achieved \rho')
-    xticks([0,length(rho_tables(:,i))]);
-    xticklabels({'100','0'});
-    legendInfo{i} = ['option' num2str(i)];
+   xlabel('% of achieved \rho')
+   xticks([0,length(rho_tables(:,i))]);
+   xticklabels({'100','0'});
+   legendInfo{i} = ['option' num2str(i)];
+%     xlabel('itertion $i$');
+%     legendInfo{i} = ['bisection search'];
 end
 legend(legendInfo);
 
