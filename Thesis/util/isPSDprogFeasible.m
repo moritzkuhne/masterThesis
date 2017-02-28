@@ -30,7 +30,7 @@ if sol.isPrimalFeasible()
                 Qset = evalMultipliers(sol);
                 [feasibility,violation] = isDSOS(blkdiag(Qset{:}));
            else
-               violation = [];
+               violation = 'none';
            end
     end
     

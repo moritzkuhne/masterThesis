@@ -39,4 +39,8 @@ function [feasibility,violation] = isDSOS(Q)
         end
     end
 
+    if isempty(violation)
+        violation = 'none';
+    end
+    
 end
