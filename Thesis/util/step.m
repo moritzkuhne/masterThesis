@@ -4,10 +4,10 @@ function rho_try = step(solution,rho_failed,options)
 switch options
     
     case 'random'
-        h = 2*rand*0.001;
+        h = 2*rand*0.01;
         
     case 'determined'
-        h = 0.001;
+        h = 0.01;
         
     otherwise 
         warning(['lineSearchMethodOption is not'...

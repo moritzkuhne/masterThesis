@@ -22,7 +22,7 @@ while ~terminate
 
     % step 1
     [rho_try,options] = fixRho(solution,rho_failed,options);
-    
+    rho_try
     % step 2
     [method,deg,options] = methodOptionsROAProg(options);
     [sol,objective,options] = method(-dV,system,[(rho_try-V),inequalities],deg,options);
@@ -30,6 +30,7 @@ while ~terminate
     % step 3
     [feasibility,violation,options] = ...
         isPSDprogFeasible(sol,objective,options);
+    violation
     
     [terminate,options] = isTerminate(solution,rho_try,rho_failed,options);
     
