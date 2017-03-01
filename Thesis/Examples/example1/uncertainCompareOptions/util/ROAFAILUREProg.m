@@ -3,13 +3,18 @@
 %           we need to handle vector of decsion variable instead of set for
 %           handelman representation!
 
-function [solution,options] = ROAProg(dV,V,inequalities,options)
+function [solution,options] = ROAFAILUREProg(system,options)
 %ROAPROG This function sets-up and solves estimatie ROA optimization prob. 
 %   Detailed explanation goes here
 global evaluation feasible infeasible slack DSOS eig DSOSeig
 
 %initiate the solution to the ROAprog
-solution = solROAprog(-dV,options);
+solution = solROAprog(system,options);
+
+V = system.V;
+dV = diff(system.V,system.states)*system.dx;
+inequalities = system.inequCon;
+
 
 %preloop assinments
 terminate = false;
@@ -21,7 +26,7 @@ while ~terminate
     
     % step 2
     [method,deg,options] = methodOptionsROAProg(options);
-    [sol,objective,options] = method(-dV,V,[(rho_try-V),inequalities],deg,options);
+    [sol,objective,options] = method(-dV,system,[(rho_try-V),inequalities],deg,options);
     
     % step 3
     [feasibility,violation,options] = ...
