@@ -54,6 +54,9 @@ switch counter.method_options
     case 7
         options.methodOptions.deg = 7;
         string.deg = '7';
+    case 8
+        options.methodOptions.deg = 8;
+        string.deg = '8';
 end
 
 %%

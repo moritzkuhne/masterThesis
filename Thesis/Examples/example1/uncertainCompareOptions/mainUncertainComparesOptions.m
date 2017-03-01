@@ -1,7 +1,7 @@
 close all; clear all; clc;
 
-%addpath(['C:\Users\fisch\OneDrive\Studies\Master Thesis\Code\'...
-%     'Thesis\Examples\example1\uncertainCompareOptions\util'])
+addpath(['C:\Users\fisch\OneDrive\Studies\Master Thesis\Code\'...
+     'Thesis\Examples\example1\uncertainCompareOptions\util'])
 
 %% setting up the systems dynamics
 disp('Setting up the dynamical system.')
@@ -21,11 +21,11 @@ system = dynamicalSystem(dx,inequalities,equalities,x,a,V);
 %%iterate through options
 disp('Iterate over options')
 
-for method_counter = 2:4 
-    for method_options_counter = 4:7
+for method_counter = 2:4
+    for method_options_counter = 4:8
        for solver_method_counter = 1:2
-           for FeasibilityTol_counter =1:3
-               for objective_counter = 1:3
+           for FeasibilityTol_counter =2:2 %1:3
+               for objective_counter = 2:2 %1:3
                
                     counter.method = method_counter;
                     counter.method_options = method_options_counter;
