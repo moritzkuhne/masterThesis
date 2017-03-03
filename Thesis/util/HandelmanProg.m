@@ -25,8 +25,7 @@ function [solution,objective,options] = HandelmanProg(poly,system,inequalities,d
     % add nonlinear multipliers
     [prog,lambda] = prog.newPos(length(mMonoid));
     prog = prog.withPolyEqs(poly-lambda.'*mMonoid-slack);
-    prog = prog.withDSOS(poly-lambda.'*mMonoid);
-        
+    
     %set solver and its options
     [solver,spotOptions,options] = solverOptionsPSDProg(options);
     
