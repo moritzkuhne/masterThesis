@@ -15,7 +15,7 @@ function [Qset] = evalMultipliers(sol)
     else
         
         if ~isempty(sol.prog.coneVar) 
-            Qset = diag(double(sol.eval(sol.prog.coneVar)));
+            Qset{1} = diag(double(sol.eval(sol.prog.coneVar)));
         end
         
     end
