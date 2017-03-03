@@ -34,9 +34,13 @@ params.FeasibilityTol = 1E-6; %default 1E-6
 params.outputFlag = 0;
 options.solverOptions = params;
 
-% options.method = @SprocedureProg; options.methodOptions.deg = 7; 
-options.method = @kSprocedureProg; options.methodOptions.deg = 4; options.methodOptions.k = 2;
-% options.method = @PsatzProg; options.methodOptions.deg = 3; 
+options.methodOptions.deg = 4;
+options.methodOptions.degP = 4;
+options.methodOptions.k = 2;
+
+options.method = @SprocedureProg; 
+% options.method = @kSprocedureProg; 
+% options.method = @PsatzProg; 
 
 %% run ROAprog
 disp('Running the ROAprog.')

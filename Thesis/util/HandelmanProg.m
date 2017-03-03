@@ -1,6 +1,7 @@
 % TO DO:   
 
-function [solution,objective,options] = HandelmanProg(poly,system,inequalities,deg,options)
+function [solution,objective,options] = HandelmanProg(poly,system,...
+    inequalities,equalities,deg,options)
 %HANDELMANPROG Sets up S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -22,9 +23,17 @@ function [solution,objective,options] = HandelmanProg(poly,system,inequalities,d
     %Add slack to optimization problem to increase numerical robustness
     [prog,objective,slack,options] = objectiveROAProgScalar(prog,system,options);
     
-    % add nonlinear multipliers
+    % add nonlinear multipliers for inequalities
     [prog,lambda] = prog.newPos(length(mMonoid));
-    prog = prog.withPolyEqs(poly-lambda.'*mMonoid-slack);
+    
+    % add multipliers for equalities
+    if ~length(equalities) == 1
+        [prog,p] = prog.newFree(length(equalities));
+    else
+        p = [];
+    end
+    
+    prog = prog.withPolyEqs(poly-lambda.'*mMonoid-p*equalities-slack);
     
     %set solver and its options
     [solver,spotOptions,options] = solverOptionsPSDProg(options);

@@ -1,6 +1,7 @@
 % TO DO:    
 
-function [solution,objective,options] = HandelmanAndDSOSProg(poly,system,inequalities,deg,options)
+function [solution,objective,options] = HandelmanAndDSOSProg(poly,...
+    system,inequalities,equalities,deg,options)
 %HandelmanAndDSOS Sets up Handelman programm constrained to DSOS 
 % in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
@@ -25,7 +26,15 @@ function [solution,objective,options] = HandelmanAndDSOSProg(poly,system,inequal
     
     % add nonlinear multipliers
     [prog,lambda] = prog.newPos(length(mMonoid));
-    prog = prog.withDSOS(poly-lambda.'*mMonoid-slack);
+    
+    % add multipliers for equalities
+    if ~length(equalities) == 1
+        [prog,p] = prog.newFree(length(equalities));
+    else
+        p = [];
+    end
+        
+    prog = prog.withDSOS(poly-lambda.'*mMonoid-p*equalities-slack);
         
     %set solver and its options
     [solver,spotOptions,options] = solverOptionsPSDProg(options);

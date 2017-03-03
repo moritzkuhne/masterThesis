@@ -2,8 +2,8 @@
 %           add possibility to change degree of g, or make it auto dectect!
 %           add detection to which power of g is used
 
-function [solution,objective,options] = PsatzProg(poly,system,inequalities,...
-    deg,options)
+function [solution,objective,options] = PsatzProg(poly,system,...
+    inequalities,equalities,deg,degP,options)
 %PsatzProg Sets up Positivstllensatz programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -26,22 +26,22 @@ function [solution,objective,options] = PsatzProg(poly,system,inequalities,...
     z = monomials(indet,0:deg);
     [prog,DSOSPoly,~] = newDSOSPoly(prog,z,...
         length(coneOfPolynomials));
+    S = DSOSPoly.'*coneOfPolynomials;
     
-    for i=1:length(coneOfPolynomials)
-        
-        if ~exist('S', 'var')
-            S = DSOSPoly(i)*coneOfPolynomials(i);
-        else
-            S = S + DSOSPoly(i)*coneOfPolynomials(i);
-        end
-        
+    %set up free multipliers for equalities
+    zP = monomials(indet,0:degP);
+    if ~length(equalities) == 0
+        [prog,FreePoly,~] = newFreePoly(prog,zP,length(equalities));
+        P = FreePoly.'*equalities.';
+    else
+        P = 0;
     end
     
     %Add slack to optimization problem to increase numerical robustness
     [prog,objective,slack,options] = objectiveROAProgDSOS(prog,system,options);
     
-    prog = prog.withDSOS((-S-poly^2-slack));
-    %prog = prog.withDSOS((-S-1-slack));
+    %DSOS constraint
+    prog = prog.withDSOS((poly-S-P-slack));
     
     %set solver and its options
     [solver,spotOptions,options] = solverOptionsPSDProg(options);

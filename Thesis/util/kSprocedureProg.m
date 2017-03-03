@@ -2,7 +2,7 @@
 %           test what happens if indet are called z (like monomials)
 
 function [solution,objective,options] = kSprocedureProg(poly,system,...
-    inequalities,deg,options)
+    inequalities,equalities,deg,degP,options)
 %SPROCEDUREPROG Sets up S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -20,27 +20,27 @@ function [solution,objective,options] = kSprocedureProg(poly,system,...
     prog = spotsosprog;
     prog = prog.withIndeterminate(indet);
     
-    % setting up DSOS polynomial multipliers
+    % setting up DSOS polynomial multiplierr for inequalities
     coneOfPolynomials = coneWithSOS(inequalities,options.methodOptions.k);
     z = monomials(indet,0:deg);
     [prog,DSOSPoly,~] = newDSOSPoly(prog,z,...
-        length(coneOfPolynomials));
+        length(coneOfPolynomials));    
+    S = DSOSPoly.'*coneOfPolynomials;
     
-    for i=1:length(coneOfPolynomials)
-        
-        if ~exist('S', 'var')
-            S = DSOSPoly(i)*coneOfPolynomials(i);
-        else
-            S = S + DSOSPoly(i)*coneOfPolynomials(i);
-        end
-        
+    %set up free multipliers for equalities
+    zP = monomials(indet,0:degP);
+    if ~length(equalities) == 0
+        [prog,FreePoly,~] = newFreePoly(prog,zP,length(equalities));
+        P = FreePoly.'*equalities.';
+    else
+        P = 0;
     end
     
     %Add slack to optimization problem to increase numerical robustness
     [prog,objective,slack,options] = objectiveROAProgDSOS(prog,system,options);
     
-    % DSOS constraint
-    prog = prog.withDSOS((poly-S-slack));
+    %DSOS constraint
+    prog = prog.withDSOS((poly-S-P-slack));
     
     %set solver and its options
     [solver,spotOptions,options] = solverOptionsPSDProg(options);

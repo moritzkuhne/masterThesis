@@ -1,7 +1,8 @@
 % TO DO:   
 %           test what happens if indet are called z (like monomials)
 
-function [solution,objective,options] = SprocedureProg(poly,system,inequalities,deg,options)
+function [solution,objective,options] = SprocedureProg(poly,system,...
+    inequalities,equalities,deg,degP,options)
 %SPROCEDUREPROG Sets up S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
@@ -12,30 +13,31 @@ function [solution,objective,options] = SprocedureProg(poly,system,inequalities,
     if nargin < 5
         options = [];
     end
-    [indet,~,~] = decomp([poly; inequalities.']);
+    [indet,~,~] = decomp([poly; inequalities.'; equalities.']);
 
     %initiate program
     prog = spotsosprog;
     prog = prog.withIndeterminate(indet);
 
-    %set up DSOS multipliers
+    %set up DSOS multipliers for inequalities
     z = monomials(indet,0:deg);
     [prog,DSOSPoly,~] = newDSOSPoly(prog,z,length(inequalities));
-    for i=1:length(inequalities)
+    S = DSOSPoly.'*inequalities.';
 
-        if ~exist('S', 'var')
-            S = DSOSPoly(i)*inequalities(i);
-        else
-            S = S + DSOSPoly(i)*inequalities(i);
-        end
-
-    end   
+    %set up free multipliers for equalities
+    zP = monomials(indet,0:degP);
+    if ~length(equalities) == 0
+        [prog,FreePoly,~] = newFreePoly(prog,zP,length(equalities));
+        P = FreePoly.'*equalities.';
+    else
+        P = 0;
+    end
     
     %Add slack to optimization problem to increase numerical robustness
     [prog,objective,slack,options] = objectiveROAProgDSOS(prog,system,options);
     
     %DSOS constraint
-    prog = prog.withDSOS((poly-S-slack));
+    prog = prog.withDSOS((poly-S-P-slack));
 
     %set solver and its options
     [solver,spotOptions,options] = solverOptionsPSDProg(options);
