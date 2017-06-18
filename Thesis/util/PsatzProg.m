@@ -15,7 +15,7 @@ function [solution,objective,options] = PsatzProg(poly,system,...
         options = [];
     end
     
-    [indet,~,~] = decomp([poly; inequalities.']);
+    [indet,~,~] = decomp([poly; inequalities.'; equalities]);
    
     %initiate program
     prog = spotsosprog;
@@ -29,8 +29,8 @@ function [solution,objective,options] = PsatzProg(poly,system,...
     S = DSOSPoly.'*coneOfPolynomials;
     
     %set up free multipliers for equalities
-    zP = monomials(indet,0:degP);
     if ~length(equalities) == 0
+        zP = monomials(indet,0:degP);
         [prog,FreePoly,~] = newFreePoly(prog,zP,length(equalities));
         P = FreePoly.'*equalities.';
     else
