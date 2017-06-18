@@ -95,13 +95,17 @@ if solution.isPrimalFeasible()
     if double(solution.eval(objective)) >= 0
         Qset = evalMultipliers(solution);
         [feasibility,~] = isDSOS(blkdiag(Qset{:}));
-        V = solution.eval(V);
+        if feasibility == 1
+            V = solution.eval(V);
+        else
+            V = [];
+        end
     else
-        feasibility = false;
+        feasibility = 0;
         V = [];
     end
 else
-    feasibility = false;
+    feasibility = -1;
     V = [];
 end
 
