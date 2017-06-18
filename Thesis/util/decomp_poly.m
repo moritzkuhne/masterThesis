@@ -1,6 +1,3 @@
-%to do: poly is considered to be linear, what happens when poly is affine!
-%       it should work by now
-
 function [A,b] = spot_decomp_poly(poly,vdecision)
 %decompose polynomials linear in decision variables into set of linear
 %constraints on the decision variable
@@ -8,18 +5,17 @@ function [A,b] = spot_decomp_poly(poly,vdecision)
 %   arguments in:
 %
 %   poly -- a polynomial in msspolys and linear in vall
-%   vall -- list of all decision variables
+%   vdecision -- list of all decision variables
 %
 %   output argubemts
 %   
 %   A -- an n-by-length(vall) matrix
 %   b -- an n-by-1 vector
-%   satisfying: A*vall = b
+%   satisfying: A*vdecision = b
 %
 %   Constraints fulfill A*vall
 %
 %   This function does preprocessing before calling spot_decomp_linear
-
 
     %decomp poly, satisfying:
     %poly = sum_k Ceq(k) prod_j veq(j)^peq(k,j)

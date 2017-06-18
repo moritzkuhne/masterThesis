@@ -1,5 +1,5 @@
 function rho_try = step(solution,rho_failed,options)
-%BISECT bisects interval with random point between interval
+%STEP Implements step for line search.
 
 switch options
     

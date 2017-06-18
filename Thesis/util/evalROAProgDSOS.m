@@ -1,6 +1,5 @@
 function [rho,opt_Qset] = evalROAProgDSOS(solution,decisionVar)
 %EVALROAPROG This function evaluates solutions from ROAProg
-%   Detailed explanation goes here
 
 % Optimal value
 if ~isempty(solution.sol)

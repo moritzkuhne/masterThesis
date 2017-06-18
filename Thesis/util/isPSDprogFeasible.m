@@ -1,7 +1,6 @@
 function [feasibility,violation,options] =...
     isPSDprogFeasible(sol,objective,options)
-%ISPSDPROGFEASIBLE 
-%   Detailed explanation goes here
+%ISPSDPROGFEASIBLE Checks if solution to step2 is feasible. 
 
 if isfield(options,'feasibilityTest')
     if ~(strcmp(options.feasibilityTest,'numerical') ||...

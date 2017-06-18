@@ -1,9 +1,6 @@
-% TO DO:   
-%           test what happens if indet are called z (like monomials)
-
 function [solution,objective,options] = kSprocedureProg(poly,system,...
     inequalities,equalities,deg,degP,options)
-%SPROCEDUREPROG Sets up S-procedure programm in order to proof 
+%KSPROCEDUREPROG Sets up K-S-procedure programm in order to proof 
 % positive semi-definiteness of poly on the domain constrainned by
 % the set of inequalities. SOS/SDSOS/DSOS are raised to degree deg
 %

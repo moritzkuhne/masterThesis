@@ -1,5 +1,3 @@
-% TO DO:    
-
 function [solution,objective,options] = HandelmanAndDSOSProg(poly,...
     system,inequalities,equalities,deg,~,options)
 %HandelmanAndDSOS Sets up Handelman programm constrained to DSOS 

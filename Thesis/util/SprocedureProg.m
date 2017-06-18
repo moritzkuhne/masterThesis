@@ -1,6 +1,3 @@
-% TO DO:   
-%           test what happens if indet are called z (like monomials)
-
 function [solution,objective,options] = SprocedureProg(poly,system,...
     inequalities,equalities,deg,degP,options)
 %SPROCEDUREPROG Sets up S-procedure programm in order to proof 

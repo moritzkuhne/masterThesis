@@ -1,7 +1,3 @@
-% TO DO:  
-%           add possibility to change degree of g, or make it auto dectect!
-%           add detection to which power of g is used
-
 function [solution,objective,options] = PsatzProg(poly,system,...
     inequalities,equalities,deg,degP,options)
 %PsatzProg Sets up Positivstllensatz programm in order to proof 

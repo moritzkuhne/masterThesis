@@ -1,6 +1,5 @@
 function [rho,opt_lambda] = evalROAProgScalar(solution,lambda)
 %EVALROAPROG This function evaluates solutions from ROAProg
-%   Detailed explanation goes here
 
 % Optimal value
 if ~isempty(solution.sol)

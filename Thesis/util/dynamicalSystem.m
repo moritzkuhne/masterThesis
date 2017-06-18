@@ -1,6 +1,6 @@
 classdef dynamicalSystem < handle
-% An object of this class holds all solution information for an 
-% ROA estimating problem via optimization
+% An object of this class holds all information for an dynamical system
+% which are needed for ROA estimatioin via DSOS optimization. 
 
     properties (Access = public)
         

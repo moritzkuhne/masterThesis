@@ -1,5 +1,3 @@
-% TO DO:   
-
 function [solution,objective,options] = HandelmanProg(poly,system,...
     inequalities,equalities,deg,~,options)
 %HANDELMANPROG Sets up S-procedure programm in order to proof 

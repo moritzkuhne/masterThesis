@@ -1,11 +1,8 @@
-% to do:    PASS rho vecotrs to program
-%           this function works so far only for psatz and k-s-procedure!
-%           we need to handle vector of decsion variable instead of set for
-%           handelman representation!
-
 function [solution,options] = ROAProg(system,options)
 %ROAPROG This function sets-up and solves estimatie ROA optimization prob. 
 %   Detailed explanation goes here
+
+global counter
 
 %initiate the solution to the ROAprog
 solution = solROAprog(system,options);
@@ -19,7 +16,7 @@ equalities = system.equCon;
 terminate = false;
 rho_failed = solution.rho_extr;
 while ~terminate
-
+    counter = counter+1;
     % step 1
     [rho_try,options] = fixRho(solution,rho_failed,options);
     rho_try
@@ -32,7 +29,6 @@ while ~terminate
     [feasibility,violation,options] = ...
         isPSDprogFeasible(sol,objective,options);
     violation
-    
     [terminate,options] = isTerminate(solution,rho_try,rho_failed,options);
     
     if feasibility

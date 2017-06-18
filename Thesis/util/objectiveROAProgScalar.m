@@ -1,6 +1,6 @@
 function [prog,objective,slack,options] = objectiveROAProgScalar(prog,system,options)
-%OBJECTIVEROAPROGDSOS Summary of this function goes here
-%   Detailed explanation goes here
+%OBJECTIVEROAPROGDSOS Returns objective in order to stabilize feasibility
+%problem.
 
     if isfield(options,'objective')
         objetiveOption = options.objective ;

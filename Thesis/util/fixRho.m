@@ -1,6 +1,5 @@
 function [rho_try,options] = fixRho(solution,rho_failed,options)
 %FIXRHO A new rho_try is determined in this function
-%   Detailed explanation goes here
 
 if isfield(options,'lineSearchMethod')
     switch options.lineSearchMethod

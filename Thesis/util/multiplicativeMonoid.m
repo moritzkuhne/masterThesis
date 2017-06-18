@@ -1,13 +1,9 @@
-%to do: should pass back the comb vector, such that I do no need 
-%       recalculateevery time
-
 function [combinatorials] = multiplicativeMonoid(polynomials,deg)
 %MULTIPLICATIVEMONOID creates multiplicative monoid of mss polynomials
 %   combines input arguments up to degree(of combination) deg
 %   e.g. f1 = x^2, deg=2 returns f1^2 
 %   consider degree of the polynomials
 %
-
 
 % preloop assignments 
 pos = []; %1 accords to first elem of polynomials 

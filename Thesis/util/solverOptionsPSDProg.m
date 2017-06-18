@@ -1,8 +1,6 @@
 function [solver,spotOptions,options] = solverOptionsPSDProg(options)
-%SOLVEROPTIONSPSDPROG The options for solver and solver options arefiltered
-%out from the input options
-
-%   Detailed explanation goes here
+%SOLVEROPTIONSPSDPROG The options for solver and solver options are 
+%filtered out from the input options
 
 %set solver
 if isfield(options,'solver')

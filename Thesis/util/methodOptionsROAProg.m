@@ -1,6 +1,5 @@
 function [method,deg,degP,options] = methodOptionsROAProg(options)
-%METHODOPTIONSROAPROG Summary of this function goes here
-%   Detailed explanation goes here
+%METHODOPTIONSROAPROG Returns default options for formulation details.
 
 if isfield(options,'method')
    method = options.method;

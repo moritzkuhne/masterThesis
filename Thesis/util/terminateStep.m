@@ -1,6 +1,5 @@
 function terminate = terminateStep(solution,rho_try,~,~)
-%TERMINATEBISECT Summary of this function goes here
-%   Detailed explanation goes here
+%TERMINATEBISECT Terminates step search. 
 
 terminate = ~(rho_try < solution.rho_extr);
 

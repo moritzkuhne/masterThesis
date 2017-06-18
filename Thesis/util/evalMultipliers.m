@@ -1,6 +1,5 @@
 function [Qset] = evalMultipliers(sol)
 %EVALROAPROG This function evaluates solutions from ROAProg
-%   Detailed explanation goes here
     if ~isempty(sol.gramMatrices) 
        
         for i=1:length(sol.gramMatrices)

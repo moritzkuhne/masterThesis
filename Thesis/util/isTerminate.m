@@ -1,6 +1,5 @@
 function [terminate,options] = isTerminate(solution,rho_try,rho_failed,options)
 %ISTERMINATE This function determines if the while loop is terminated
-%   Detailed explanation goes here
 
 if isfield(options,'lineSearchMethod')
     switch options.lineSearchMethod

@@ -1,12 +1,8 @@
-%to do:     multivariable/multidimensional system
-%           whats about B C D
-
 function [dx_lin,A] = linearizeDynamicalSystem(system)
 %LINEARIZEDYNAMICALSYSTEM This function returns a linearized system to an
 %mss-poly system
 %   So far, only passive systems are considered, e.g. it is only linearized
 %   for A matrix.
-%   More explenation here
 
 % x = msspoly('x',2);
 % a = msspoly('a',1);

@@ -1,6 +1,6 @@
 function options = defaultLineSearchOptions(method)
-%DEFAULTLINESEARCHOPTIONS Summary of this function goes here
-%   Detailed explanation goes here
+%DEFAULTLINESEARCHOPTIONS Retuns the options which are used by
+% default for LineSearch. 
 
 options = 'random';
 

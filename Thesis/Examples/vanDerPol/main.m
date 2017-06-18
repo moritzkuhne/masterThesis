@@ -88,7 +88,7 @@ system = dynamicalSystem(dx_transverse,inequalties,equalities,...
     x_transverse,parameters,x_transverse.'*x_transverse);
 
 %% create initial Lyapunov function for (linearized) system
-% disp('crate initial Lyapunov function')
+% disp('create initial Lyapunov function')
 % 
 % V = 0.5*(x_transverse.'*x_transverse);
 %% find maximum level set of V for which system is stable
@@ -101,12 +101,10 @@ options.rho = [0 5];
 options.lineSearchMethod = 'bisect';
 options.lineSearchMethodOptions = 'random'; 
 
-
 disp('Running the ROAprog.')
 
 [solution,options] = ROAProg(system,options);
 rho_table_bisect(i) = solution.rho;
-
 
 % %line search
 % options.rho = [rho_table_bisect(i) (norm(x_interp(i,:)))^2+0.1];

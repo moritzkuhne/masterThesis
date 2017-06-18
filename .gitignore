@@ -17,6 +17,9 @@ Thesis/Examples/fragments/ignoreInput.m
 
 
 Thesis/util/ROAFAILUREProg.m
+Thesis/util/ensuredHandelmanAndDSOSProg.m
+Thesis/util/lyapunovCandidate.m
+Thesis/util/offDiag.m
 
 Thesis/Examples/example1/uncertainLineSearch/plots/Line0.tex
 Thesis/Examples/example1/uncertainCompareOptions/SOS.mat

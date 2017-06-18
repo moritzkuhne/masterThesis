@@ -1,13 +1,13 @@
-%to do: find new name as it is misleading. it does NOT generate a cone with
-%       SOS finite expression but only the LHS of the Positivstellensatz
-%       polynomials which are preceeded with SOS multipliers    
-
 function [combinatorials] = coneWithSOS(inequalities,deg)
-%coneWithSOS creates cone with SOS i.e. with finite length of mss polynomials
+%coneWithSOS creates cone with DSOS i.e. with finite length of polynomials
 %   this function does not use multiplicativeMonoid since it can operate
 %   faster due to its finite length
 %
 %   furthermore it does not return a '1' at its first entry
+%   itt does NOT generate a cone with
+%   DSOS finite expression but only the LHS of the Positivstellensatz
+%   polynomials which are preceeded with SOS multipliers
+
 
 if nargin < 2
     deg = length(inequalities);

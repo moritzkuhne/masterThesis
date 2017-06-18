@@ -1,6 +1,5 @@
 function terminate = terminateBisect(solution,rho_try,rho_failed,~)
-%TERMINATEBISECT Summary of this function goes here
-%   Detailed explanation goes here
+%TERMINATEBISECT Terminates bisection search.
 
 a = 0.001;
 
