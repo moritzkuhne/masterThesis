@@ -21,7 +21,7 @@ system = dynamicalSystem(dx,inequalities,equalities,x,a,V);
 %%iterate through options
 disp('Iterate over options')
 
-for method_counter = 2:4
+for method_counter = 1:1
     for method_options_counter = 4:8
        for solver_method_counter = 1:2
            for FeasibilityTol_counter =2:2 %1:3

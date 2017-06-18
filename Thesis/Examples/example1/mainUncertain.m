@@ -35,10 +35,11 @@ params.outputFlag = 0;
 options.solverOptions = params;
 
 options.methodOptions.deg = 4;
-options.methodOptions.degP = 4;
+options.methodOptions.degP = 0;
 options.methodOptions.k = 2;
 
-options.method = @SprocedureProg; 
+% options.method = @HandelmanAndDSOSProg; %this does not work. 
+% options.method = @SprocedureProg; 
 % options.method = @kSprocedureProg; 
 % options.method = @PsatzProg; 
 

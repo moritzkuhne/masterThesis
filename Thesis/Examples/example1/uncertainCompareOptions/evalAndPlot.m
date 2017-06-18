@@ -4,12 +4,12 @@ close all; clear all; clc;
 
 % constant over ALL solver_method, FeasibilityTol, objective
 
-solver_method = 2; %1: simplex, 2: barrier
+solver_method = 1; %1: simplex, 2: barrier
 FeasibilityTol = 2; %1e-6
 objective = 2; %Lyap
 
 % option 1
-method = 4; %Sprocedure
+method = 1; %Sprocedure
 
     %option 1.1
     counter11.method_options = 4;

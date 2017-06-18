@@ -3,7 +3,7 @@ function subMain(system,options,counter)
 %   Detailed explanation goes here
 
 %preloop assignments and allocation
-i_end = 2;
+i_end = 100;
 solution_table(1:i_end) = cell(i_end,1);
 
 global evaluation feasible infeasible slack DSOS eig DSOSeig
