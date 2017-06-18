@@ -29,13 +29,14 @@ switch counter.method
         string.method = '4Sprocedure';
     case 5
         options.method = @SprocedureProg;
+        options.methodOptions.k = 1;
         string.method = 'Sprocedure';
     case 6
         options.method = @HandelmanAndDSOSProg;
         string.method = 'HandelmanAndDSOS';
     case 7
         options.method = @HandelmanProg;
-        string.method = 'HandelmanProg';
+        string.method = 'Handelman';
 end
 
 %%
@@ -98,9 +99,6 @@ switch counter.objective
         options.objective = '0';
         string.objective = '0';
     case 2
-        options.objective = 'Lyap'; 
-        string.objective = 'Lyap';
-    case 3
         options.objective = 'indets';
         string.objective = 'indets';
 end
