@@ -14,7 +14,7 @@ solution = solROAprog(system,options);
 V = system.V;
 dV = diff(system.V,system.states)*system.dx;
 inequalities = system.inequCon;
-
+equalities = system.equCon;
 
 %preloop assinments
 terminate = false;
@@ -25,9 +25,9 @@ while ~terminate
     [rho_try,options] = fixRho(solution,rho_failed,options);
     
     % step 2
-    [method,deg,options] = methodOptionsROAProg(options);
-    [sol,objective,options] = method(-dV,system,[(rho_try-V),inequalities],deg,options);
-    
+    [method,deg,degP,options] = methodOptionsROAProg(options);
+    [sol,objective,options] = method(-dV,system,...
+        [(rho_try-V),inequalities],equalities,deg,degP,options);
     % step 3
     [feasibility,violation,options] = ...
         isPSDprogFeasible(sol,objective,options);
