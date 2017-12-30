@@ -1,9 +1,7 @@
 function evalAndPlot(optionsCell)
 close all; clear all; clc;
 %% setting the options
-
 % constant over ALL solver_method, FeasibilityTol, objective
-
 solver_method = 1; %1: simplex, 2: barrier
 FeasibilityTol = 2; %1e-6
 objective = 2; %Lyap

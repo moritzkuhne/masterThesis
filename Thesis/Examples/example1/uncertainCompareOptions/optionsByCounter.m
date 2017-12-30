@@ -1,12 +1,9 @@
 function [options,string] = optionsByCounter(counter)
-%OPTIONSBYCOUNTER Summary of this function goes here
-%   Detailed explanation goes here
-
 %%
     options.solverOptions.outputFlag = 0;
     options.rho = [0 0.5];
     options.lineSearchMethod = 'bisect';
-    options.lineSearchMethodOptions = 'random'; %this line does not do anything yet
+    options.lineSearchMethodOptions = 'random'; 
     options.feasibilityTest = 'analytical';
     options.solver = @spot_gurobi;
 
@@ -94,6 +91,5 @@ switch counter.objective
         options.objective = 'indets';
         string.objective = 'indets';
 end
-
 end
 

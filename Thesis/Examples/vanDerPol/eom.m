@@ -9,8 +9,3 @@ Y1dot = Y2;
 Y2dot = -Y1+mu*(1-Y1^2)*Y2;
 
 dY = [Y1dot; Y2dot];
-
-%% simple linear model
-% A = [0 1; -1 0]; 
-
-% dY = A*Y;

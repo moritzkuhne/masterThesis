@@ -1,8 +1,3 @@
-% to do:    PASS rho vecotrs to program
-%           this function works so far only for psatz and k-s-procedure!
-%           we need to handle vector of decsion variable instead of set for
-%           handelman representation!
-
 function [solution,options] = ROAFAILUREProg(system,options)
 %ROAPROG This function sets-up and solves estimatie ROA optimization prob. 
 %   Detailed explanation goes here

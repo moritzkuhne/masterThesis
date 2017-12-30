@@ -1,6 +1,4 @@
 function subMainFreeV(options,counter)
-%SUBMAIN Summary of this function goes here
-%   Detailed explanation goes here
 
 [~,string] = optionsByCounter(counter);
 
@@ -16,6 +14,5 @@ end
 matFile = strcat('data/',string.method,string.deg,string.solver_method,...
             string.FeasibilityTol,string.objective,'.mat');
 save(matFile,'solution','feasibility','V');
-
 end
 

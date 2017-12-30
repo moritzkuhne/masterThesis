@@ -16,31 +16,5 @@ dtau = dtau_nom/dtau_den;
 dx_transverse_sum1 = PI*system(tau,(x+transp(PI)*x_transverse));
 dx_transverse_sum2 = -PI*system(tau,x)*dtau;
 dx_transverse = dx_transverse_sum1 + dx_transverse_sum2;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 end
 

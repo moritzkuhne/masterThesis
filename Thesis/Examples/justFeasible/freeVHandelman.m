@@ -21,7 +21,7 @@ disp('Setting options for BoxProg')
 %setting options for both of them, than individuals
 
 options.lineSearchMethod = 'bisect';
-options.lineSearchMethodOptions = 'random'; %this line does not do anything yet
+options.lineSearchMethodOptions = 'random'; 
 options.objective = '0'; 
 options.feasibilityTest = 'analytical';
 
@@ -108,6 +108,4 @@ else
     feasibility = -1;
     V = [];
 end
-
-
 end

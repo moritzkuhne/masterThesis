@@ -1,9 +1,10 @@
-% reporting: the problem is JUST feasible, i.e. objective needs to be 0
-%           for the same reason KSprocedure and PSatz strugle!  
-%           on the other hand, deg = 0 does an awesome job!
-%           Handelman fails, but HandelmanDSOS sucesses (of course it does)
-
-% example 4.1 in Sankaranarayanan2013
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% main file for example 4.1 in Sankaranarayanan2013                      %
+%                                                                        %
+% by M. Fischer-Gundlach, Delft 2017                                     %
+%                                                                        %
+%                                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 close all; clear all; clc;
 
 %%

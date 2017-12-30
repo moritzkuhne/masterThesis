@@ -1,6 +1,4 @@
 function subMain(system,options,counter)
-%SUBMAIN Summary of this function goes here
-%   Detailed explanation goes here
 
 %preloop assignments and allocation
 i_end = 1;

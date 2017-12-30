@@ -9,7 +9,6 @@ function [z,PI] = transversalPlains2D(system,tau,x)
 %   R is the roation matrix from global to transverse incl. normal vector z
 %   PI is the projection matrix from global into transverse
 
-
 z_vectors = zeros(2); %warning('works only for planar dynamics')
 %z = system(tau,x)/norm(system(tau,x)); %the surface is orthogonal to the trajectory
 z = (1/norm(x))*[-x(2);x(1)]; %the surface is radial to the center
@@ -33,12 +32,12 @@ for i=1:length(z)
 end
 
 % constructing projection matrix
-zeta_vectors = zeros(length(z)); %vectors of the transv. coord. system zeta_i = zeta_vectors(:,i)
+%vectors of the transv. coord. system zeta_i = zeta_vectors(:,i)
+zeta_vectors = zeros(length(z)); 
 for i=1:length(eta_vectors)
     zeta_vectors(:,i) = R*eta_vectors(:,i);
 end
 
 PI = zeta_vectors(:,2:end).';
-
 end
 

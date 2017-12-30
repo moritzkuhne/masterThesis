@@ -1,3 +1,11 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% main file for comparing implementatioin details on example1            %
+%                                                                        %
+% by M. Fischer-Gundlach, Delft 2017                                     %
+%                                                                        %
+%                                                                        %       
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 close all; clear all; clc;
 
 addpath(['C:\Users\fisch\OneDrive\Studies\Master Thesis\Code\'...
